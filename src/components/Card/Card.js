@@ -1,36 +1,66 @@
 import React from 'react'
-import { View, Text, Image, StyleSheet } from 'react-native'
+import {
+    View,
+    Text,
+    Image,
+    StyleSheet,
+    Button,
+    StatusBar
+} from 'react-native'
 
 const styles = StyleSheet.create({
     container: {
-        margin: 20,
+        margin: 5,
         backgroundColor: 'white',
         display: 'flex',
         flexDirection: 'row',
-        height: 200,
-        alignItems: 'baseline'
+        height: 180,
+        alignItems: 'flex-start',
     },
     cardImage: {
-        width: '50%',
+        width: 100,
         height: '65%',
-        margin: 30,
+
     },
     cardTitle: {
-        fontSize: 28,
+        fontSize: 32,
+        fontWeight: 'bold',
+        textAlign: 'center',
+    },
+    cardContainer: {
+        margin: 9
+    },
+    product: {
+        borderBottomColor: 'grey',
+        borderBottomWidth: 2,
+        marginBottom: 30,
+    },
+    scrollView: {
+        backgroundColor: 'pink',
+        marginHorizontal: 20,
+    },
+    safeView: {
+        flexGrow: 1,
+        paddingTop: StatusBar.currentHeight,
     }
-
 });
 
-export const Card = () => {
+export const Card = ({ imageUrl, title, price }) => {
     return (
         <View style={styles.container}>
-            <Image
-                style={styles.cardImage}
-                source={{
-                    uri: 'https://upload.wikimedia.org/wikipedia/commons/6/6d/Good_Food_Display_-_NCI_Visuals_Online.jpg',
-                }}
-            />
-            <Text style={styles.cardTitle}>Slides</Text>
+            <View style={styles.cardContainer}>
+                <Image
+                    style={styles.cardImage}
+                    source={{
+                        uri: imageUrl
+                    }}
+                />
+            </View>
+            <View style={styles.product}>
+                <Text style={styles.cardTitle}>{title}</Text>
+                <Text>Цена: {price} лв.</Text>
+                <Button title="Добави в кошницата" />
+            </View>
         </View>
     )
 }
