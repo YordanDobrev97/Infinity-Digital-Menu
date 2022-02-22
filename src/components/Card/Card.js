@@ -4,9 +4,11 @@ import {
     Text,
     Image,
     StyleSheet,
-    Button,
-    StatusBar
+    StatusBar,
+    TouchableOpacity
 } from 'react-native'
+import { Button } from 'react-native-elements'
+
 
 const styles = StyleSheet.create({
     container: {
@@ -42,6 +44,15 @@ const styles = StyleSheet.create({
     safeView: {
         flexGrow: 1,
         paddingTop: StatusBar.currentHeight,
+    },
+    buttonStyle: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingVertical: 12,
+        paddingHorizontal: 32,
+        borderRadius: 4,
+        elevation: 3,
+        backgroundColor: 'black',
     }
 });
 
@@ -59,7 +70,9 @@ export const Card = ({ imageUrl, title, price }) => {
             <View style={styles.product}>
                 <Text style={styles.cardTitle}>{title}</Text>
                 <Text>Цена: {price} лв.</Text>
-                <Button title="Добави в кошницата" />
+                <TouchableOpacity style={styles.buttonStyle}>
+                    <Text style={{color: 'white'}}>Добави в кошницата</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
