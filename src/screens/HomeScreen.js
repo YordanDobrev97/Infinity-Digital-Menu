@@ -13,7 +13,7 @@ import {
 import { Icon } from 'native-base'
 import Header from '../components/Header/index'
 import { Card } from '../components/Card/Card'
-import { Sidebar } from '../components/Sidebar/Sidebar'
+import Sidebar from '../components/Sidebar/Sidebar'
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: '#7393B3',
@@ -93,10 +93,11 @@ const HomeScreen = () => {
 
   return (
     <SafeAreaView style={styles.safeView}>
-
       <View style={styles.header}>
-        <TouchableOpacity style={styles.iconContainer} onPress={showMenuHandler}>
-          <Icon name='menu' style={styles.icon}/>
+        <TouchableOpacity
+          style={styles.iconContainer}
+          onPress={showMenuHandler}>
+          <Icon name='menu' style={styles.icon} />
         </TouchableOpacity>
 
         <Text style={styles.headerText}>Digital Menu</Text>
@@ -115,18 +116,8 @@ const HomeScreen = () => {
             )
           }} />
       </View>
-      
-      <Modal visible={showMenu}>
-        <Image
-          source={{
-            uri: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg'
-          }}
-        />
-        <Text>Something...</Text>
-        <TouchableOpacity onPress={closeMenu}>
-          <Icon name='close' />
-        </TouchableOpacity>
-      </Modal>
+      <Sidebar showMenu={showMenu} setShowMenu={setShowMenu} />
+
     </SafeAreaView>
   )
 };

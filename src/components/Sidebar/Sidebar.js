@@ -1,9 +1,82 @@
-import { View, Text } from 'react-native'
+import React from 'react'
+import { View, Text, Image, TouchableOpacity, Modal, StyleSheet } from 'react-native'
+import { Icon } from 'native-base'
 
-export const Sidebar = () => {
+const styles = StyleSheet.create({
+    sidebarContainer: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#201C1E',
+        color: 'white'
+    },
+    closeIcon: {
+        color: '#ffff'
+    },
+    navItemContainer: {
+        margin: 4
+    },
+    navItem: {
+        color: 'white',
+        borderBottomWidth: 1,
+        margin: 3,
+        borderBottomColor: 'white'
+    },
+    navItemText: {
+        color: 'white',
+        fontSize: 24,
+        textAlign: 'center'
+    }
+})
+
+const Sidebar = ({ setShowMenu, showMenu }) => {
+    const closeMenu = () => {
+        setShowMenu(false)
+    }
+
     return (
-        <View>
-            <Text>Sidebar</Text>
-        </View>
+        <Modal visible={showMenu}>
+            <View style={styles.sidebarContainer}>
+                <Image
+                    source={{
+                        uri: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg'
+                    }}
+                />
+                <TouchableOpacity onPress={closeMenu}>
+                    <Icon name='close' style={styles.closeIcon}/>
+                </TouchableOpacity>
+
+                <View style={styles.navItemContainer}>
+                    <View style={styles.navItem}>
+                        <Text style={styles.navItemText}>
+                            <Icon name='home' style={{color: 'white'}}/>
+                            Начало
+                        </Text>
+                    </View>
+
+                    <View style={styles.navItem}>
+                        <Text style={styles.navItemText}>
+                            <Icon name='cart' style={{color: 'white'}}/>
+                            Кошница
+                        </Text>
+                    </View>
+
+                    <View style={styles.navItem}>
+                        <Text style={styles.navItemText}>
+                        <Icon name='menu' style={{color: 'white'}}/>
+                            Категории
+                        </Text>
+                    </View>
+
+                    <View style={styles.navItem}>
+                        <Text style={styles.navItemText}>
+                            Вход
+                        </Text>
+                    </View>
+                </View>
+            </View>
+
+        </Modal>
     )
 }
+
+export default Sidebar
