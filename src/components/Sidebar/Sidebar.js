@@ -1,5 +1,13 @@
 import React from 'react'
-import { View, Text, Image, TouchableOpacity, Modal, StyleSheet } from 'react-native'
+import {
+    View,
+    Text,
+    Image,
+    TouchableOpacity,
+    Modal,
+    Button,
+    StyleSheet
+} from 'react-native'
 import { Icon } from 'native-base'
 
 const styles = StyleSheet.create({
@@ -25,14 +33,13 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 24,
         textAlign: 'center'
-    }
+    },
 })
 
-const Sidebar = ({ setShowMenu, showMenu }) => {
+const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
     const closeMenu = () => {
         setShowMenu(false)
     }
-
     return (
         <Modal visible={showMenu}>
             <View style={styles.sidebarContainer}>
@@ -42,35 +49,36 @@ const Sidebar = ({ setShowMenu, showMenu }) => {
                     }}
                 />
                 <TouchableOpacity onPress={closeMenu}>
-                    <Icon name='close' style={styles.closeIcon}/>
+                    <Icon name='close' style={styles.closeIcon} />
                 </TouchableOpacity>
-
+                    <Text style={{color: 'white'}}>{navigation !== null}</Text>
                 <View style={styles.navItemContainer}>
                     <View style={styles.navItem}>
                         <Text style={styles.navItemText}>
-                            <Icon name='home' style={{color: 'white'}}/>
+                            <Icon name='home' style={{ color: 'white' }} />
                             Начало
                         </Text>
                     </View>
 
                     <View style={styles.navItem}>
                         <Text style={styles.navItemText}>
-                            <Icon name='cart' style={{color: 'white'}}/>
+                            <Icon name='cart' style={{ color: 'white' }} />
                             Кошница
                         </Text>
                     </View>
 
                     <View style={styles.navItem}>
                         <Text style={styles.navItemText}>
-                        <Icon name='menu' style={{color: 'white'}}/>
+                            <Icon name='menu' style={{ color: 'white' }} />
                             Категории
                         </Text>
                     </View>
 
                     <View style={styles.navItem}>
-                        <Text style={styles.navItemText}>
-                            Вход
-                        </Text>
+                        <Button title='Вход' onPress={() => {
+                            setShowMenu(false)
+                            navigation.navigate('Login')
+                        }}/>
                     </View>
                 </View>
             </View>

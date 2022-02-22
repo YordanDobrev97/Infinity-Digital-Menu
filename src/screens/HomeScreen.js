@@ -25,7 +25,6 @@ const styles = StyleSheet.create({
   },
   header: {
     width: '100%',
-
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -47,14 +46,14 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: '#ffff',
-    fontSize: 28,
+    fontSize: 40,
   },
   headerTitle: {
     flexDirection: 'row'
   },
 });
 
-const HomeScreen = () => {
+const HomeScreen = (props) => {
   const [products, setProducts] = useState([
     {
       id: 1,
@@ -116,7 +115,10 @@ const HomeScreen = () => {
             )
           }} />
       </View>
-      <Sidebar showMenu={showMenu} setShowMenu={setShowMenu} />
+      <Sidebar
+        showMenu={showMenu}
+        setShowMenu={setShowMenu}
+        navigation={props.navigation} />
 
     </SafeAreaView>
   )
