@@ -1,0 +1,55 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Users\Lora i Mario\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add react-native-reanimated
+
+PATH: 
+  C:\Users\Lora i Mario\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\local\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\usr\bin;C:\Program Files\Git\mingw64\bin;C:\Program Files\Git\usr\bin;C:\Users\Lora i Mario\bin;C:\Program Files\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0;C:\Windows\System32\OpenSSH;C:\Program Files\Git\cmd;C:\Program Files\nodejs;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn;C:\Program Files (x86)\Microsoft SQL Server\150\Tools\Binn;C:\Program Files\Microsoft SQL Server\150\Tools\Binn;C:\Program Files\Microsoft SQL Server\150\DTS\Binn;C:\Program Files (x86)\Microsoft SQL Server\150\DTS\Binn;C:\Program Files\Azure Data Studio\bin;C:\Program Files\dotnet;C:\Program Files\Docker\Docker\resources\bin;C:\ProgramData\DockerDesktop\version-bin;C:\Users\Lora i Mario\Downloads\php-8.1.2-nts-Win32-vs16-x64;C:\ProgramData\ComposerSetup\bin;C:\Users\Lora i Mario\AppData\Roaming\npm;C:\Users\Lora i Mario\AppData\Local\Android\Sdk\platform-tools;C:\Users\Lora i Mario\AppData\Local\Microsoft\WindowsApps;C:\Users\Lora i Mario\AppData\Roaming\npm;C:\Users\Lora i Mario\AppData\Local\Programs\Microsoft VS Code\bin;C:\Program Files\Azure Data Studio\bin;C:\Users\Lora i Mario\.dotnet\tools;C:\Program Files\heroku\bin;C:\Users\Lora i Mario\AppData\Roaming\Composer\vendor\bin;ANDROID_HOME;D:\InteliJ\IntelliJ IDEA Community Edition 2021.3.2\bin;C:\Program Files\Git\usr\bin\vendor_perl;C:\Program Files\Git\usr\bin\core_perl
+
+Yarn version: 
+  1.22.17
+
+Node version: 
+  16.13.2
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: EPERM: operation not permitted, unlink 'D:\udemy\react-native\rn-starter\node_modules\@react-navigation\routers\src'
+
+npm manifest: 
+  {
+    "main": "node_modules/expo/AppEntry.js",
+    "scripts": {
+      "start": "expo start",
+      "android": "expo start --android",
+      "ios": "expo start --ios",
+      "web": "expo start --web",
+      "eject": "expo eject"
+    },
+    "dependencies": {
+      "@react-native-community/masked-view": "0.1.10",
+      "@react-navigation/stack": "^6.1.1",
+      "expo": "^43.0.0",
+      "expo-status-bar": "~1.1.0",
+      "react": "17.0.1",
+      "react-dom": "17.0.1",
+      "react-native": "https://github.com/expo/react-native/archive/sdk-43.tar.gz",
+      "react-native-gesture-handler": "~1.10.2",
+      "react-native-reanimated": "~2.2.0",
+      "react-native-safe-area-context": "3.3.2",
+      "react-native-screens": "~3.8.0",
+      "react-native-web": "0.17.1",
+      "react-navigation": "^4.4.4",
+      "react-navigation-stack": "^2.10.4"
+    },
+    "devDependencies": {
+      "@babel/core": "^7.12.9"
+    },
+    "private": true
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

@@ -10,11 +10,11 @@ import {
 
 const styles = StyleSheet.create({
     container: {
-        margin: 5,
+        marginBottom: 20,
         backgroundColor: 'white',
-        display: 'flex',
+        flex: 1,
         flexDirection: 'row',
-        height: 180,
+        height: 150,
         alignItems: 'flex-start',
     },
     cardImage: {
