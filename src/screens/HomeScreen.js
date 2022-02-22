@@ -2,43 +2,131 @@ import React, { useState } from 'react'
 import {
   StyleSheet,
   View,
-  ScrollView,
+  Text,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  FlatList,
+  Modal,
+  Image,
+  TouchableOpacity
 } from 'react-native'
-
+import { Icon } from 'native-base'
+import Header from '../components/Header/index'
 import { Card } from '../components/Card/Card'
-
+import { Sidebar } from '../components/Sidebar/Sidebar'
 const styles = StyleSheet.create({
   scrollView: {
-      backgroundColor: '#7393B3',
-      marginHorizontal: 10,
+    backgroundColor: '#7393B3',
+    marginHorizontal: 10,
   },
   safeView: {
-      flexGrow: 1,
-      paddingTop: StatusBar.currentHeight,
-  }
+    flexGrow: 1,
+    paddingTop: StatusBar.currentHeight
+  },
+  header: {
+    width: '100%',
+
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    padding: 10
+  },
+  headerText: {
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#ffff',
+    letterSpacing: 2,
+  },
+  iconContainer: {
+    position: 'absolute',
+    left: 0,
+    fontSize: 39,
+    marginTop: 3,
+  },
+  icon: {
+    color: '#ffff',
+    fontSize: 28,
+  },
+  headerTitle: {
+    flexDirection: 'row'
+  },
 });
 
 const HomeScreen = () => {
+  const [products, setProducts] = useState([
+    {
+      id: 1,
+      title: 'Hamburger',
+      price: 2,
+      imageUrl: 'https://www.popsci.com/uploads/2019/11/07/QDAYJRT4D5BFNNI72QBPU73BDQ.jpg?auto=webp'
+    },
+    {
+      id: 2,
+      title: 'Coca Cola',
+      price: 1,
+      imageUrl: 'https://daily.jstor.org/wp-content/uploads/2015/04/Coke_Branding_1050x700.jpg'
+    },
+    {
+      id: 3,
+      title: 'Rufless',
+      price: 1,
+      imageUrl: 'https://www.ebag.bg/products/images/86445/800'
+    },
+    {
+      id: 4,
+      title: 'Sprite',
+      price: 1,
+      imageUrl: 'https://m.media-amazon.com/images/I/61bkEued9fL._SL1500_.jpg'
+    }
+  ])
+  const [showMenu, setShowMenu] = useState(false)
+
+  const showMenuHandler = () => {
+    setShowMenu(true)
+  }
+
+  const closeMenu = () => {
+    setShowMenu(false)
+  }
+
   return (
     <SafeAreaView style={styles.safeView}>
-      <ScrollView style={styles.scrollView}>
-        <View>
-          <Card 
-          imageUrl={'https://cdncloudcart.com/16398/products/images/39404/gazirana-napitka-coca-cola-ken-330-ml-image_5ea2cc6235fb6_800x800.png?1587731937'}
-          title='Кока'
-          price={1}/>
 
-          <Card imageUrl={'https://cdncloudcart.com/16372/products/images/33235/cips-chio-s-luk-i-smetana-140-g-image_5e836a664eafb_800x800.jpeg?1585695636'}
-          title='Чипс'
-          price={2}/>
- 
-          <Card imageUrl={'https://vida.bg/wp-content/uploads/2020/09/%D0%9C%D0%B8%D0%BA%D1%81-%D1%8F%D0%B4%D0%BA%D0%B8-Coctail-400-%D0%B3%D1%80.-XXL.png'}
-          title='Cocktail'
-          price={2}/>
-        </View>
-      </ScrollView>
+      <View style={styles.header}>
+        <TouchableOpacity style={styles.iconContainer} onPress={showMenuHandler}>
+          <Icon name='menu' style={styles.icon}/>
+        </TouchableOpacity>
+
+        <Text style={styles.headerText}>Digital Menu</Text>
+      </View>
+
+      <View>
+        <FlatList
+          keyExtractor={product => product.id}
+          data={products}
+          renderItem={({ item }) => {
+            return (
+              <Card
+                imageUrl={item.imageUrl}
+                title={item.title}
+                price={item.price} />
+            )
+          }} />
+      </View>
+      
+      <Modal visible={showMenu}>
+        <Image
+          source={{
+            uri: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg'
+          }}
+        />
+        <Text>Something...</Text>
+        <TouchableOpacity onPress={closeMenu}>
+          <Icon name='close' />
+        </TouchableOpacity>
+      </Modal>
     </SafeAreaView>
   )
 };
