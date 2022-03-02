@@ -1,10 +1,9 @@
-import { createAppContainer, createNavigationContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack";
-import { createDrawerNavigator } from 'react-navigation-drawer'
-import HomeStack from "./src/screens/HomeScreen";
-import Header from './src/components/Header/index'
+import React from 'react'
+import { createAppContainer } from "react-navigation";
+import { createStackNavigator } from "react-navigation-stack"
+import HomeStack from "./src/screens/HomeScreen"
 import Login from './src/screens/Login'
-import {View , Text} from 'react-native'
+import AdminScreen from './src/screens/AdminScreen'
 
 const navigator = createStackNavigator(
   {
@@ -18,6 +17,9 @@ const navigator = createStackNavigator(
     },
     Login: {
       screen: Login,
+    },
+    Admin: {
+      screen: AdminScreen
     }
   },
   

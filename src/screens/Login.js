@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { Text, TouchableOpacity, View, StyleSheet, TextInput } from 'react-native'
 
+import { auth } from '../firebase/config'
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -50,12 +52,31 @@ const styles = StyleSheet.create({
     }
 })
 
-const Login = ({ navigation }) => {
+const Login = (props) => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [message, setMessage] = useState('')
+
+    const loginHandler = () => {
+        if (email && password) {
+            auth
+                .signInWithEmailAndPassword(email, password)
+                .then(userCredentials => {
+                    const user = userCredentials.user;
+                    props.navigation.navigate('Admin')
+                })
+                .catch(error => alert(error.message))
+        }
+    }
 
     return (
         <View style={styles.container}>
+            {message ? (
+                <Text>{message}</Text>
+            ) : (
+                <Text></Text>
+            )}
+
             <View style={styles.inputView}>
                 <TextInput
                     style={styles.TextInput}
@@ -79,7 +100,7 @@ const Login = ({ navigation }) => {
                 <Text style={styles.forgot_button}>Forgot Password?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginBtn}>
+            <TouchableOpacity onPress={loginHandler} style={styles.loginBtn}>
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
         </View>
