@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
@@ -14,7 +14,7 @@ import { Icon } from 'native-base'
 import Header from '../components/Header/index'
 import { Card } from '../components/Card/Card'
 import Sidebar from '../components/Sidebar/Sidebar'
-
+import { firestore } from '../firebase/config'
 import AuthContext from '../context/AuthContext'
 
 const styles = StyleSheet.create({
@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
   },
   safeView: {
     flexGrow: 1,
-    paddingTop: StatusBar.currentHeight
+    paddingTop: StatusBar.currentHeight,
+    backgroundColor: '#1A1B20'
   },
   header: {
     width: '100%',
@@ -58,34 +59,48 @@ const styles = StyleSheet.create({
 
 const HomeScreen = (props) => {
   const [products, setProducts] = useState([
-    {
-      id: 1,
-      title: 'Hamburger',
-      price: 2,
-      imageUrl: 'https://www.popsci.com/uploads/2019/11/07/QDAYJRT4D5BFNNI72QBPU73BDQ.jpg?auto=webp'
-    },
-    {
-      id: 2,
-      title: 'Coca Cola',
-      price: 1,
-      imageUrl: 'https://daily.jstor.org/wp-content/uploads/2015/04/Coke_Branding_1050x700.jpg'
-    },
-    {
-      id: 3,
-      title: 'Rufless',
-      price: 1,
-      imageUrl: 'https://www.ebag.bg/products/images/86445/800'
-    },
-    {
-      id: 4,
-      title: 'Sprite',
-      price: 1,
-      imageUrl: 'https://m.media-amazon.com/images/I/61bkEued9fL._SL1500_.jpg'
-    }
+    // {
+    //   id: 1,
+    //   title: 'Hamburger',
+    //   price: 2,
+    //   imageUrl: 'https://www.popsci.com/uploads/2019/11/07/QDAYJRT4D5BFNNI72QBPU73BDQ.jpg?auto=webp'
+    // },
+    // {
+    //   id: 2,
+    //   title: 'Coca Cola',
+    //   price: 1,
+    //   imageUrl: 'https://daily.jstor.org/wp-content/uploads/2015/04/Coke_Branding_1050x700.jpg'
+    // },
+    // {
+    //   id: 3,
+    //   title: 'Rufless',
+    //   price: 1,
+    //   imageUrl: 'https://www.ebag.bg/products/images/86445/800'
+    // },
+    // {
+    //   id: 4,
+    //   title: 'Sprite',
+    //   price: 1,
+    //   imageUrl: 'https://m.media-amazon.com/images/I/61bkEued9fL._SL1500_.jpg'
+    // }
   ])
   const [showMenu, setShowMenu] = useState(false)
   const [isAuth, setAuth] = useState(false)
  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const dbProducts = await (await firestore.collection('products').get()).docs.map((product => {
+        return product.data()
+      }))
+      return dbProducts
+    }
+
+    fetchProducts()
+    .then((res) => {
+      setProducts(res)
+    })
+  }, [])
+
   const showMenuHandler = () => {
     setShowMenu(true)
   }
@@ -108,14 +123,18 @@ const HomeScreen = (props) => {
         </View>
 
         <View>
+        {console.log(products)}
+      </View>
+
+        <View>
           <FlatList
             keyExtractor={product => product.id}
             data={products}
             renderItem={({ item }) => {
               return (
                 <Card
-                  imageUrl={item.imageUrl}
-                  title={item.title}
+                  imageUrl={item.photo}
+                  title={item.name}
                   price={item.price} />
               )
             }} />
