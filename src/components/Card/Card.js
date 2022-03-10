@@ -13,7 +13,7 @@ import { Button } from 'react-native-elements'
 const styles = StyleSheet.create({
     container: {
         marginBottom: 20,
-        backgroundColor: 'white',
+        backgroundColor: '#324646',
         flex: 1,
         flexDirection: 'row',
         height: 150,
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 3,
-        backgroundColor: 'black',
+        backgroundColor: 'orange',
     }
 });
 
