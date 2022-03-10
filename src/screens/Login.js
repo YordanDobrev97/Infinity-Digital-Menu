@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { Text, TouchableOpacity, View, StyleSheet, TextInput } from 'react-native'
 
 import { auth } from '../firebase/config'
-
+import AuthContext from '../context/AuthContext'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -57,12 +57,15 @@ const Login = (props) => {
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState('')
 
+    const context = useContext(AuthContext)
+
     const loginHandler = () => {
         if (email && password) {
             auth
                 .signInWithEmailAndPassword(email, password)
                 .then(userCredentials => {
                     const user = userCredentials.user;
+                    context.loggedIn(true)
                     props.navigation.navigate('Admin')
                 })
                 .catch(error => alert(error.message))

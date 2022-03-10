@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {
     View,
     Text,
@@ -9,6 +9,8 @@ import {
     StyleSheet
 } from 'react-native'
 import { Icon } from 'native-base'
+
+import AuthContext from '../../context/AuthContext'
 
 const styles = StyleSheet.create({
     sidebarContainer: {
@@ -40,6 +42,9 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
     const closeMenu = () => {
         setShowMenu(false)
     }
+
+    const context = useContext(AuthContext)
+
     return (
         <Modal visible={showMenu}>
             <View style={styles.sidebarContainer}>
@@ -75,10 +80,16 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                     </View>
 
                     <View style={styles.navItem}>
-                        <Button title='Вход' onPress={() => {
-                            setShowMenu(false)
-                            navigation.navigate('Login')
-                        }}/>
+                        {context.isAuth ? (
+                            <Button title='Вход' onPress={() => {
+                                setShowMenu(false)
+                                navigation.navigate('Login')
+                            }}/>
+                        ): (
+                            <Button 
+                            onPress={() => navigation.navigate('Admin')} 
+                            title='Администрация'/>
+                        )}
                     </View>
                 </View>
             </View>
