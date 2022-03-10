@@ -14,6 +14,9 @@ import { Icon } from 'native-base'
 import Header from '../components/Header/index'
 import { Card } from '../components/Card/Card'
 import Sidebar from '../components/Sidebar/Sidebar'
+
+import AuthContext from '../context/AuthContext'
+
 const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: '#7393B3',
@@ -81,7 +84,8 @@ const HomeScreen = (props) => {
     }
   ])
   const [showMenu, setShowMenu] = useState(false)
-
+  const [isAuth, setAuth] = useState(false)
+ 
   const showMenuHandler = () => {
     setShowMenu(true)
   }
@@ -92,34 +96,35 @@ const HomeScreen = (props) => {
 
   return (
     <SafeAreaView style={styles.safeView}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          style={styles.iconContainer}
-          onPress={showMenuHandler}>
-          <Icon name='menu' style={styles.icon} />
-        </TouchableOpacity>
+      <AuthContext.Provider value={{isAuth, setAuth}}>
+        <View style={styles.header}>
+          <TouchableOpacity
+            style={styles.iconContainer}
+            onPress={showMenuHandler}>
+            <Icon name='menu' style={styles.icon} />
+          </TouchableOpacity>
 
-        <Text style={styles.headerText}>Digital Menu</Text>
-      </View>
+          <Text style={styles.headerText}>Digital Menu</Text>
+        </View>
 
-      <View>
-        <FlatList
-          keyExtractor={product => product.id}
-          data={products}
-          renderItem={({ item }) => {
-            return (
-              <Card
-                imageUrl={item.imageUrl}
-                title={item.title}
-                price={item.price} />
-            )
-          }} />
-      </View>
-      <Sidebar
-        showMenu={showMenu}
-        setShowMenu={setShowMenu}
-        navigation={props.navigation} />
-
+        <View>
+          <FlatList
+            keyExtractor={product => product.id}
+            data={products}
+            renderItem={({ item }) => {
+              return (
+                <Card
+                  imageUrl={item.imageUrl}
+                  title={item.title}
+                  price={item.price} />
+              )
+            }} />
+        </View>
+        <Sidebar
+          showMenu={showMenu}
+          setShowMenu={setShowMenu}
+          navigation={props.navigation} />
+      </AuthContext.Provider>
     </SafeAreaView>
   )
 };
