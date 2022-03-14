@@ -7,13 +7,14 @@ import AuthContext from './src/context/AuthContext'
 import HomeScreen from './src/screens/HomeScreen'
 import AdminScreen from './src/screens/AdminScreen'
 import BasketScreen from './src/screens/BasketScreen'
-import Siderbar from './src/components/Sidebar/Sidebar'
+import LoginScreen from './src/screens/Login'
+import AddProductScreen from './src/screens/AddProductScreen'
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   const [products, setProducts] = useState([])
-  const [isAuth, loggedIn] = useState(false)
+  const [isAuth, loggedIn] = useState(true)
 
   return (
     <CartContext.Provider value={{ products, setProducts }}>
@@ -23,6 +24,9 @@ function App() {
           <Stack.Screen name="Home" component={HomeScreen}/>
           <Stack.Screen name="Admin" component={AdminScreen} />
           <Stack.Screen name="Basket" component={BasketScreen} />
+          <Stack.Screen name="Login" component={LoginScreen} />
+          <Stack.Screen name="AddProduct" component={AddProductScreen} />
+
         </Stack.Navigator>
       </NavigationContainer>
       </AuthContext.Provider>
