@@ -1,43 +1,61 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground } from 'react-native';
-import { MaterialIcons } from '@expo/vector-icons';
+import React, { useState } from 'react'
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import { Icon } from 'native-base'
 
-export default function Header({ title }) {
+import Sidebar from '../Sidebar/Sidebar'
 
-  const openMenu = () => {
-    //navigation.openDrawer();
+const Header = ({ navigation }) => {
+  const [showMenu, setShowMenu] = useState(false)
+
+  const showMenuHandler = () => {
+    setShowMenu(true)
+  }
+
+  if (showMenu) {
+    return <Sidebar showMenu={showMenu} setShowMenu={setShowMenu} navigation={navigation} />
   }
 
   return (
     <View style={styles.header}>
-      <MaterialIcons name='menu' size={8} onPress={openMenu} style={styles.icon} />
-      <View style={styles.headerTitle}>
-        <Text style={styles.headerText}>{title}</Text>
+      <TouchableOpacity
+        style={styles.iconContainer}
+        onPress={showMenuHandler}>
+        <Icon name='menu' style={styles.icon} />
+      </TouchableOpacity>
+
+      <View style={{ width: '80%', margin: 'auto' }}>
+        <Text style={styles.headerText}>Digital Menu</Text>
       </View>
     </View>
-  );
+  )
 }
 
 const styles = StyleSheet.create({
   header: {
     width: '100%',
-    height: '100%',
+    height: '10%',
+    display: 'flex',
     flexDirection: 'row',
-    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'black',
+    padding: 0
   },
   headerText: {
     fontWeight: 'bold',
     fontSize: 20,
-    color: '#333',
-    letterSpacing: 1,
+    color: '#ffff',
+    letterSpacing: 2,
+    textAlign: 'center'
+  },
+  iconContainer: {
+    position: 'relative',
+    left: 0,
+    fontSize: 39,
   },
   icon: {
-    position: 'absolute',
-    left: 0,
-    color: 'black',
-    fontSize: 32,
+    color: '#ffff',
+    fontSize: 40,
   },
-  headerTitle: {
-    flexDirection: 'row'
-  },
-});
+})
+
+export default Header

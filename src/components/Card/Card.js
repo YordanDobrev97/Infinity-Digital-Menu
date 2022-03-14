@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useContext } from 'react'
 import {
     View,
     Text,
@@ -7,56 +7,76 @@ import {
     StatusBar,
     TouchableOpacity
 } from 'react-native'
-import { Button } from 'react-native-elements'
-
+import CartContext from '../../context/CartContext'
 
 const styles = StyleSheet.create({
     container: {
-        marginBottom: 20,
-        backgroundColor: '#324646',
+        marginTop: 5,
         flex: 1,
         flexDirection: 'row',
-        height: 150,
         alignItems: 'flex-start',
+        borderBottomWidth: 3,
+        borderColor: '#ffff'
     },
     cardImage: {
         width: 100,
         height: '65%',
-
+        margin: 4,
     },
     cardTitle: {
-        fontSize: 32,
+        fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
+        color: '#1387d4'
     },
     cardContainer: {
-        margin: 9
+        marginTop: 12,
+        marginLeft: 10,
     },
     product: {
-        borderBottomColor: 'grey',
-        borderBottomWidth: 2,
-        marginBottom: 30,
-    },
-    scrollView: {
-        backgroundColor: 'pink',
-        marginHorizontal: 20,
+        borderBottomWidth: 3,
+        marginBottom: 10,
+        marginLeft: '5%',
     },
     safeView: {
         flexGrow: 1,
         paddingTop: StatusBar.currentHeight,
     },
     buttonStyle: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 12,
-        paddingHorizontal: 32,
+        margin: 3,
+        padding: 4,
         borderRadius: 4,
-        elevation: 3,
-        backgroundColor: 'orange',
+        backgroundColor: '#259399',
+    },
+    removeButton: {
+        margin: 3,
+        padding: 4,
+        borderRadius: 4,
+        backgroundColor: 'red',
     }
 });
 
-export const Card = ({ imageUrl, title, price }) => {
+export const Card = ({ id, imageUrl, title, price }) => {
+    const [isAddInCart, setInCart] = useState(false)
+
+    const context = useContext(CartContext)
+
+    const onAddToCart = () => {
+        if (!context.cart.includes(id)) {
+            context.setCart((oldValue) => [...oldValue, id])
+            setInCart(true)
+        } else {
+            setInCart(false)
+        }
+    }
+
+    const onRemoveFromCart = () => {
+        context.setCart((oldValue) => oldValue.filter((p) => {
+            return p.id !== id
+        }))
+        setInCart(false)
+    }
+
     return (
         <View style={styles.container}>
             <View style={styles.cardContainer}>
@@ -70,9 +90,15 @@ export const Card = ({ imageUrl, title, price }) => {
             <View style={styles.product}>
                 <Text style={styles.cardTitle}>{title}</Text>
                 <Text>Цена: {price} лв.</Text>
-                <TouchableOpacity style={styles.buttonStyle}>
-                    <Text style={{color: 'white'}}>Добави в кошницата</Text>
-                </TouchableOpacity>
+                {!isAddInCart ? (
+                    <TouchableOpacity onPress={onAddToCart} style={styles.buttonStyle}>
+                        <Text style={{ color: 'white' }}>Добави в кошницата</Text>
+                    </TouchableOpacity>
+                ) : (
+                    <TouchableOpacity onPress={onRemoveFromCart} style={styles.removeButton}>
+                        <Text style={{ color: 'white' }}>Премахни от кошницата</Text>
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     )

@@ -1,41 +1,33 @@
-import React from 'react'
-import { createAppContainer } from "react-navigation";
-import { createStackNavigator } from "react-navigation-stack"
-import HomeStack from "./src/screens/HomeScreen"
-import Login from './src/screens/Login'
+import React, { useState } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import CartContext from './src/context/CartContext'
+import AuthContext from './src/context/AuthContext'
+import HomeScreen from './src/screens/HomeScreen'
 import AdminScreen from './src/screens/AdminScreen'
-import AddProductScreen from './src/screens/AddProductScreen'
+import BasketScreen from './src/screens/BasketScreen'
+import Siderbar from './src/components/Sidebar/Sidebar'
 
-const navigator = createStackNavigator(
-  {
-    Home: {
-      screen: HomeStack,
-      navigationOptions: ({ navigation }) => {
-        return {
-         headerShown: false,
-        }
-      }
-    },
-    Login: {
-      screen: Login,
-    },
-    Admin: {
-      screen: AdminScreen,
-      navigationOptions: ({ navigation }) => {
-        return {
-         headerShown: false,
-        }
-      }
-    },
-    AddProduct: {
-      screen: AddProductScreen,
-      navigationOptions: ({ navigation }) => {
-        return {
-         headerShown: false,
-        }
-      }
-    }
-  }
-);
+const Stack = createNativeStackNavigator();
 
-export default createAppContainer(navigator);
+function App() {
+  const [products, setProducts] = useState([])
+  const [isAuth, loggedIn] = useState(false)
+
+  return (
+    <CartContext.Provider value={{ products, setProducts }}>
+      <AuthContext.Provider value={{isAuth, loggedIn}}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{headerShown: false}} initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen}/>
+          <Stack.Screen name="Admin" component={AdminScreen} />
+          <Stack.Screen name="Basket" component={BasketScreen} />
+        </Stack.Navigator>
+      </NavigationContainer>
+      </AuthContext.Provider>
+    </CartContext.Provider>
+  );
+}
+
+export default App;
