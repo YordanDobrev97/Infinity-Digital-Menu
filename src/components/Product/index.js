@@ -1,14 +1,15 @@
 import React, { useState, useContext } from 'react'
-import { Text, Image, View, StyleSheet, Button } from 'react-native'
+import { Text, Image, View, StyleSheet, Button, TouchableOpacity } from 'react-native'
 import CartContext from '../../context/CartContext'
 
 const Product = ({ id, name, price, image }) => {
   const [flag, setFlag] = useState(false)
+  const [count, setCount] = useState(0)
   const context = useContext(CartContext)
 
   const onAddProduct = () => {
     context.setProducts((oldValue) => {
-      return [...oldValue, {id, name, price, image}]
+      return [...oldValue, { id, name, price, image, count }]
     })
     setFlag(true)
   }
@@ -29,10 +30,19 @@ const Product = ({ id, name, price, image }) => {
         <Text style={styles.productName}>{name}</Text>
         <Text style={styles.productPrice}>Цена: {price} лв.</Text>
         {flag ? (
-          <Button title='Премахни' onPress={onRemoveProduct}/>
-        ): (
-          <Button title='Добави в кошницата' onPress={onAddProduct}/>
+          <Button title='Премахни' onPress={onRemoveProduct} />
+        ) : (
+          <Button title='Добави в кошницата' onPress={onAddProduct} />
         )}
+        <View style={styles.productCount}>
+          <TouchableOpacity style={styles.button} onPress={() => setCount((prevValue) => prevValue - 1)}>
+            <Text style={styles.buttonText}>-</Text>
+          </TouchableOpacity>
+          <Text style={styles.buttonText}>{count}</Text>
+          <TouchableOpacity style={styles.button} onPress={() => setCount((prevValue) => prevValue + 1)}>
+            <Text style={styles.buttonText}>+</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
       <View style={styles.line} />
@@ -43,8 +53,8 @@ const styles = StyleSheet.create({
   product: {
     width: '100%',
     maxHeight: '90%',
-    marginBottom: 45,
-    padding: 18,
+    margin: 5,
+    padding: 8,
     backgroundColor: '#0C2035',
   },
   productName: {
@@ -65,65 +75,35 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '90%',
+    minHeight: '20%',
     backgroundColor: '#176268',
     borderRadius: 20,
     margin: 0,
-    padding: 10,
+    padding: 1,
     display: 'flex',
     alignItems: 'center',
+  },
+  productCount: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 8,
+    marginBottom: 18,
+    backgroundColor: 'grey',
+    width: '40%',
+    height: '15%',
+  },
+  buttonText: {
+    textAlign: 'center',
+    color: '#ffff',
+    fontSize: 20,
+  },
+  button: {
+    width: 40,
+    height: 30,
+    margin: 6,
+    backgroundColor: '#FE9A28'
   }
-
-  // card: {
-  //   backgroundColor: '#0b466e',
-  //   borderRadius: 16,
-  //   shadowOpacity: 0.2,
-  //   shadowRadius: 4,
-  //   shadowColor: 'black',
-  //   shadowOffset: {
-  //     height: 0,
-  //     width: 0,
-  //   },
-  //   elevation: 1,
-  //   marginVertical: 20,
-  // },
-  // thumb: {
-  //   height: 260,
-  //   borderTopLeftRadius: 16,
-  //   borderTopRightRadius: 16,
-  //   width: '100%',
-  // },
-  // infoContainer: {
-  //   padding: 16,
-  // },
-  // name: {
-  //   fontSize: 28,
-  //   fontWeight: 'bold',
-  //   color: '#0ED8FF',
-  //   textAlign: 'center'
-  // },
-  // price: {
-  //   fontSize: 20,
-  //   fontWeight: '600',
-  //   marginBottom: 8,
-  //   color: '#FC3400',
-  //   textAlign: 'center'
-  // },
-  // button: {
-  //   backgroundColor: '#eb500e',
-  //   width: '65%',
-  //   borderRadius: 8,
-  // },
-  // text: {
-  //   color: '#ffff',
-  //   textAlign: 'center'
-  // },
-  // toolbar: {
-  //   height: '20%',
-  //   width: '100%',
-  //   flexDirection: 'row',
-  //   borderRadius: 3,
-  //   marginLeft: '20%'
-  // },
 });
 
 export default Product
