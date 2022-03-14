@@ -17,7 +17,7 @@ const HomeScreen = ({ navigation }) => {
   const [currentCount, setCurrentCount] = useState(0)
   const [maxCount, setMaxCount] = useState(3)
   const [isLoading, setLoading] = useState(true)
-  
+
   useEffect(() => {
     const fetchProducts = async () => {
       const dbProducts = await (await firestore.collection('products').get()).docs.map((product => {
@@ -57,7 +57,7 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <View style={styles.wrapper}>
-      <Header navigation={navigation}/>
+      <Header navigation={navigation} />
 
       <View style={styles.productContainer}>
         <FlatList
@@ -67,7 +67,9 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
 
+      <View style={{marginTop: 28}}>
       <Button title='Следваща страница' />
+      </View>
     </View>
 
   )
@@ -75,9 +77,9 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 1,
-    height: '100%',
-    backgroundColor: '#414141'
+    flex: 2,
+    height: '80%',
+    backgroundColor: 'black'
   },
 
   scrollView: {
@@ -86,8 +88,7 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     width: '100%',
-    height: '83%',
-    margin: 'auto'
+    height: '80%',
   }
 });
 
