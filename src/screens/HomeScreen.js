@@ -1,151 +1,94 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   StyleSheet,
   View,
   Text,
-  SafeAreaView,
-  StatusBar,
   FlatList,
-  Modal,
-  Image,
+  Button,
   TouchableOpacity
 } from 'react-native'
-import { Icon } from 'native-base'
 import Header from '../components/Header/index'
-import { Card } from '../components/Card/Card'
-import Sidebar from '../components/Sidebar/Sidebar'
+import Product from '../components/Product/index'
 import { firestore } from '../firebase/config'
-import AuthContext from '../context/AuthContext'
+import CartContext from '../context/CartContext'
 
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: '#7393B3',
-    marginHorizontal: 10,
-  },
-  safeView: {
-    flexGrow: 1,
-    paddingTop: StatusBar.currentHeight,
-    backgroundColor: '#1A1B20'
-  },
-  header: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'black',
-    padding: 10
-  },
-  headerText: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    color: '#ffff',
-    letterSpacing: 2,
-  },
-  iconContainer: {
-    position: 'absolute',
-    left: 0,
-    fontSize: 39,
-    marginTop: 3,
-  },
-  icon: {
-    color: '#ffff',
-    fontSize: 40,
-  },
-  headerTitle: {
-    flexDirection: 'row'
-  },
-});
-
-const HomeScreen = (props) => {
-  const [products, setProducts] = useState([
-    // {
-    //   id: 1,
-    //   title: 'Hamburger',
-    //   price: 2,
-    //   imageUrl: 'https://www.popsci.com/uploads/2019/11/07/QDAYJRT4D5BFNNI72QBPU73BDQ.jpg?auto=webp'
-    // },
-    // {
-    //   id: 2,
-    //   title: 'Coca Cola',
-    //   price: 1,
-    //   imageUrl: 'https://daily.jstor.org/wp-content/uploads/2015/04/Coke_Branding_1050x700.jpg'
-    // },
-    // {
-    //   id: 3,
-    //   title: 'Rufless',
-    //   price: 1,
-    //   imageUrl: 'https://www.ebag.bg/products/images/86445/800'
-    // },
-    // {
-    //   id: 4,
-    //   title: 'Sprite',
-    //   price: 1,
-    //   imageUrl: 'https://m.media-amazon.com/images/I/61bkEued9fL._SL1500_.jpg'
-    // }
-  ])
-  const [showMenu, setShowMenu] = useState(false)
-  const [isAuth, setAuth] = useState(false)
- 
+const HomeScreen = ({ navigation }) => {
+  const [products, setProducts] = useState([])
+  const [currentCount, setCurrentCount] = useState(0)
+  const [maxCount, setMaxCount] = useState(3)
+  const [isLoading, setLoading] = useState(true)
+  
   useEffect(() => {
     const fetchProducts = async () => {
       const dbProducts = await (await firestore.collection('products').get()).docs.map((product => {
-        return product.data()
+        return { id: product.id, ...product.data() }
       }))
       return dbProducts
     }
 
     fetchProducts()
-    .then((res) => {
-      setProducts(res)
-    })
+      .then((res) => {
+        setProducts(res)
+        setLoading(false)
+      })
   }, [])
 
-  const showMenuHandler = () => {
-    setShowMenu(true)
+  if (isLoading) {
+    return (
+      <View style={{ flex: 1, margin: 30 }}>
+        <Text style={{ textAlign: 'center', color: 'darkblue' }}>Loading...</Text>
+      </View>
+    )
   }
 
-  const closeMenu = () => {
-    setShowMenu(false)
+  const renderItem = ({ item }) => {
+    return (
+      <Product
+        key={item.id}
+        id={item.id}
+        name={item.name}
+        image={item.photo}
+        price={item.price}
+      />
+    )
   }
+
+  const currentProducts = products.splice(currentCount, maxCount)
 
   return (
-    <SafeAreaView style={styles.safeView}>
-      <AuthContext.Provider value={{isAuth, setAuth}}>
-        <View style={styles.header}>
-          <TouchableOpacity
-            style={styles.iconContainer}
-            onPress={showMenuHandler}>
-            <Icon name='menu' style={styles.icon} />
-          </TouchableOpacity>
+    <View style={styles.wrapper}>
+      <Header navigation={navigation}/>
 
-          <Text style={styles.headerText}>Digital Menu</Text>
-        </View>
-
-        <View>
-        {console.log(products)}
+      <View style={styles.productContainer}>
+        <FlatList
+          keyExtractor={(item) => item.id}
+          data={currentProducts}
+          renderItem={renderItem}
+        />
       </View>
 
-        <View>
-          <FlatList
-            keyExtractor={product => product.id}
-            data={products}
-            renderItem={({ item }) => {
-              return (
-                <Card
-                  imageUrl={item.photo}
-                  title={item.name}
-                  price={item.price} />
-              )
-            }} />
-        </View>
-        <Sidebar
-          showMenu={showMenu}
-          setShowMenu={setShowMenu}
-          navigation={props.navigation} />
-      </AuthContext.Provider>
-    </SafeAreaView>
+      <Button title='Следваща страница' />
+    </View>
+
   )
 };
 
-export default HomeScreen;
+const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    height: '100%',
+    backgroundColor: '#414141'
+  },
+
+  scrollView: {
+    borderWidth: 5,
+    borderColor: '#303B4E'
+  },
+  productContainer: {
+    width: '100%',
+    height: '83%',
+    margin: 'auto'
+  }
+});
+
+export default HomeScreen

@@ -42,7 +42,6 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
     const closeMenu = () => {
         setShowMenu(false)
     }
-
     const context = useContext(AuthContext)
 
     return (
@@ -56,7 +55,7 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                 <TouchableOpacity onPress={closeMenu}>
                     <Icon name='close' style={styles.closeIcon} />
                 </TouchableOpacity>
-                    <Text style={{color: 'white'}}>{navigation !== null}</Text>
+                <Text style={{ color: 'white' }}>{navigation !== null}</Text>
                 <View style={styles.navItemContainer}>
                     <View style={styles.navItem}>
                         <Text style={styles.navItemText}>
@@ -66,10 +65,8 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                     </View>
 
                     <View style={styles.navItem}>
-                        <Text style={styles.navItemText}>
                             <Icon name='cart' style={{ color: 'white' }} />
-                            Кошница
-                        </Text>
+                            <Button title={'Кошница'} onPress={() => navigation.navigate('Basket')}/>
                     </View>
 
                     <View style={styles.navItem}>
@@ -84,11 +81,11 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                             <Button title='Вход' onPress={() => {
                                 setShowMenu(false)
                                 navigation.navigate('Login')
-                            }}/>
-                        ): (
-                            <Button 
-                            onPress={() => navigation.navigate('Admin')} 
-                            title='Администрация'/>
+                            }} />
+                        ) : (
+                            <Button
+                                onPress={() => navigation.navigate('Admin')}
+                                title='Администрация' />
                         )}
                     </View>
                 </View>
