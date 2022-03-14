@@ -43,7 +43,7 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
         setShowMenu(false)
     }
     const context = useContext(AuthContext)
-
+    console.log(context)
     return (
         <Modal visible={showMenu}>
             <View style={styles.sidebarContainer}>
@@ -77,7 +77,7 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                     </View>
 
                     <View style={styles.navItem}>
-                        {context.isAuth ? (
+                        {!context.isAuth ? (
                             <Button title='Вход' onPress={() => {
                                 setShowMenu(false)
                                 navigation.navigate('Login')

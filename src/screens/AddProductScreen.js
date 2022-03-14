@@ -75,10 +75,12 @@ const styles = StyleSheet.create({
   },
 })
 
-const AddProductScreen = (props) => {
+const AddProductScreen = ({ navigation }) => {
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0.0)
   const [photo, setPhoto] = useState(null)
+  const [description, setDescription] = useState('')
+
   const [state, setState] = useState('')
 
   const pickImage = async () => {
@@ -99,9 +101,13 @@ const AddProductScreen = (props) => {
     .add({
       name,
       price,
-      photo
+      photo,
+      description
     }).then(() => {
-      props.navigation.navigate('Home')
+      navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}]
+      })
     })
   }
 
@@ -123,6 +129,14 @@ const AddProductScreen = (props) => {
             style={styles.input}
             keyboardType='numeric'
             placeholder='Цена на продукта'
+            placeholderTextColor={'white'}
+            onChangeText={value => setPrice(value)}
+          />
+        </View>
+        <View style={styles.inputView}>
+          <TextInput
+            style={styles.input}
+            placeholder='Описание на продукта'
             placeholderTextColor={'white'}
             onChangeText={value => setPrice(value)}
           />
