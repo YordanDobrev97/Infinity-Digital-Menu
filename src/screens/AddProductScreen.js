@@ -10,7 +10,7 @@ import {
   StyleSheet
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
-import { firestore } from '../firebase/config'
+import { firestore, storage } from '../firebase/config'
 
 const styles = StyleSheet.create({
   boxContainer: {
@@ -98,17 +98,26 @@ const AddProductScreen = ({ navigation }) => {
 
   const onAddProduct = () => {
     firestore.collection('products')
-    .add({
-      name,
-      price,
-      photo,
-      description
-    }).then(() => {
-      navigation.reset({
-        index: 0,
-        routes: [{name: 'Home'}]
+      .add({
+        name,
+        price,
+        photo,
+        description
+      }).then(async () => {
+        try {
+          var storageRef = storage().ref('first-image.png')
+          storageRef.put(photo).then((res) => {
+            console.log('success!!!')
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'Home' }]
+            })
+          })
+          //storageRef.putFile(photo)
+        } catch (error) {
+          console.log(error)
+        }
       })
-    })
   }
 
   return (
@@ -155,8 +164,8 @@ const AddProductScreen = ({ navigation }) => {
         </View>
         <View>
           <Button
-          style={styles.button} title='Добави'
-          onPress={onAddProduct}
+            style={styles.button} title='Добави'
+            onPress={onAddProduct}
           />
         </View>
       </View>
