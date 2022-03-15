@@ -47,7 +47,7 @@ const HomeScreen = ({ navigation }) => {
         key={item.id}
         id={item.id}
         name={item.name}
-        image={item.photo}
+        image={item.photoUrl}
         price={item.price}
       />
     )

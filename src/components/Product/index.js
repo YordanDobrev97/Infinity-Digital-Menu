@@ -1,11 +1,43 @@
-import React, { useState, useContext } from 'react'
-import { Text, Image, View, StyleSheet, Button, TouchableOpacity } from 'react-native'
+import React, { useState, useContext, useEffect } from 'react'
+import {
+  Text,
+  Image,
+  View,
+  StyleSheet,
+  Button,
+  TouchableOpacity,
+  Dimensions,
+} from 'react-native'
 import CartContext from '../../context/CartContext'
+import { storage } from '../../firebase/config'
+
+const { width } = Dimensions.get("window")
 
 const Product = ({ id, name, price, image }) => {
   const [flag, setFlag] = useState(false)
   const [count, setCount] = useState(0)
+  const [imageUrl, setImageUrl] = useState('')
   const context = useContext(CartContext)
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      const lastIndex = image.lastIndexOf('/') + 1
+      const fileName = image.substring(lastIndex)
+      var storageRef = storage().ref(fileName)
+      await storageRef.put(image)
+
+      const photoUrl = await storageRef.getDownloadURL()
+      return photoUrl
+    }
+
+    setImageUrl(image)
+    // fetchImage()
+    //   .then((url) => {
+    //     console.log('URL IMAGE ==  ', url)
+    //     //setImageUrl(url)
+    //   })
+
+  }, [])
 
   const onAddProduct = () => {
     context.setProducts((oldValue) => {
@@ -25,7 +57,10 @@ const Product = ({ id, name, price, image }) => {
   return (
     <View style={styles.product}>
       <View style={styles.container}>
-        <Image style={styles.productImage} source={{ uri: image }} />
+        <Image
+          resizeMode={"contain"}
+          style={{ width: width / 3, height: width / 3 }}
+          source={{ uri: imageUrl }} />
 
         <Text style={styles.productName}>{name}</Text>
         <Text style={styles.productPrice}>Цена: {price} лв.</Text>
@@ -47,6 +82,7 @@ const Product = ({ id, name, price, image }) => {
 
       <View style={styles.line} />
     </View>
+
   );
 }
 const styles = StyleSheet.create({

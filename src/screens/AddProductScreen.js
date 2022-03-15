@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 const AddProductScreen = ({ navigation }) => {
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0.0)
-  const [photo, setPhoto] = useState(null)
+  const [photo, setPhoto] = useState('')
   const [description, setDescription] = useState('')
 
   const [state, setState] = useState('')
@@ -92,26 +92,63 @@ const AddProductScreen = ({ navigation }) => {
     });
 
     if (!result.cancelled) {
+      console.log('Image Uri = ', result.uri)
       setPhoto(result.uri)
     }
   };
 
-  const onAddProduct = () => {
+  const uploadImage = async () => {
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function () {
+        reject(new TypeError("Network request failed"));
+      };
+      xhr.responseType = "blob";
+      xhr.open("GET", photo, true);
+      xhr.send(null);
+    });
+
+    const lastIndex = photo.lastIndexOf('/') + 1
+    const fileName = photo.substring(lastIndex)
+    const ref = storage().ref().child(fileName);
+
+    const task = ref.put(blob, { contentType: 'image/jpeg' });
+    let url = ''
+    task.on('state_changed',
+      (snapshot) => {
+        console.log(snapshot.totalBytes)
+      },
+      (err) => {
+        console.log(err)
+      },
+      () => {
+        task.snapshot.ref.getDownloadURL().then((downloadURL) => {
+          add(downloadURL)
+          return downloadURL
+        });
+      })
+      return url
+  }
+
+  const onAddProduct = async () => {
+    await uploadImage()
+  }
+
+  const add = (photoUrl) => {
     firestore.collection('products')
       .add({
         name,
         price,
-        photo,
+        photoUrl,
         description
-      }).then(async () => {
+      }).then(() => {
         try {
-          var storageRef = storage().ref('first-image.png')
-          storageRef.put(photo).then((res) => {
-            console.log('success!!!')
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Home' }]
-            })
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }]
           })
           //storageRef.putFile(photo)
         } catch (error) {
