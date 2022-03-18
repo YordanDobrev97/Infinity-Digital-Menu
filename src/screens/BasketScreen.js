@@ -1,4 +1,5 @@
 import React, { useContext, useEffect } from 'react'
+import { FlatList } from 'react-native'
 import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CartContext from '../context/CartContext'
@@ -17,6 +18,35 @@ const BasketScreen = ({ navigation }) => {
         })
     }
 
+    const renderItem = ({ item }) => {
+        return (
+            <View style={{ flex: 1, height: '30%' }}>
+                <View style={{ width: width - 20, margin: 10, backgroundColor: '#0b466e', flexDirection: 'row', borderBottomWidth: 2, borderColor: "#cccccc", paddingBottom: 10 }}>
+                    <Image
+                        resizeMode={"contain"}
+                        style={{ width: width / 3, height: width / 3 }}
+                        source={{ uri: item.image }} />
+                    <View
+                        style={{ flex: 1, backgroundColor: 'transparent', padding: 10, justifyContent: "space-between" }}>
+                        <View>
+                            <Text style={{ fontWeight: "bold", color: 'white', fontSize: 20 }}>{item.name}</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Text style={{ fontWeight: 'bold', color: "#9fd236", fontSize: 20 }}>
+                                {item.count} x {item.price}
+                            </Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <TouchableOpacity style={{ backgroundColor: '#dae2e4', padding: 8, borderRadius: 12 }}>
+                                    <Text>Премахни</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.container}>
             <Icon.Button onPress={onBack} name="arrow-left" backgroundColor="#3b5998">
@@ -26,34 +56,15 @@ const BasketScreen = ({ navigation }) => {
             </Icon.Button>
             <View style={{ height: 10 }} />
 
-            {context.products && context.products.map((product) => {
-                return (
-                    <View style={{ flex: 1 }}>
-                        <View style={{ width: width - 20, margin: 10, backgroundColor: '#0b466e', flexDirection: 'row', borderBottomWidth: 2, borderColor: "#cccccc", paddingBottom: 10 }}>
-                            <Image
-                                resizeMode={"contain"}
-                                style={{ width: width / 3, height: width / 3 }}
-                                source={{ uri: product.image }} />
-                            <View
-                                style={{ flex: 1, backgroundColor: 'transparent', padding: 10, justifyContent: "space-between" }}>
-                                <View>
-                                    <Text style={{ fontWeight: "bold", color: 'white', fontSize: 20 }}>{product.name}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <Text style={{ fontWeight: 'bold', color: "#9fd236", fontSize: 20 }}>
-                                        {product.count} x {product.price}
-                                    </Text>
-                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <TouchableOpacity style={{ backgroundColor: '#dae2e4', padding: 8, borderRadius: 12 }}>
-                                            <Text>Премахни</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                )
-            })}
+            <View style={{ flex: 2, width: '100%', maxHeight: '70%' }}>
+                {context.products && (
+                    <FlatList
+                        keyExtractor={(item) => item.id}
+                        data={context.products}
+                        renderItem={renderItem}
+                    />
+                )}
+            </View>
 
             <View style={{ height: 20 }} />
 
