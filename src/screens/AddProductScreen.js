@@ -5,75 +5,11 @@ import {
   Button,
   TextInput,
   TouchableOpacity,
-  Image,
   Dimensions,
   StyleSheet
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { firestore, storage } from '../firebase/config'
-
-const styles = StyleSheet.create({
-  boxContainer: {
-    backgroundColor: '#1C1F1F',
-    width: '100%',
-    height: '96.5%'
-  },
-  button: {
-    backgroundColor: '#33B5FF',
-    color: 'white'
-  },
-  inputView: {
-    backgroundColor: "#393B38",
-    borderRadius: 30,
-    width: "70%",
-    height: 70,
-    marginLeft: 40,
-    marginBottom: 5,
-    alignItems: "center",
-  },
-  input: {
-    height: 50,
-    flex: 1,
-    padding: 10,
-    margin: 5,
-    color: 'white'
-  },
-  smallText: {
-    textAlign: 'center',
-    color: 'white',
-    fontSize: 18,
-    marginTop: 18,
-  },
-  uploadButton: {
-    borderRadius: 16,
-    alignSelf: 'center',
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 7,
-      height: 5,
-    },
-    shadowOpacity: 1.58,
-    shadowRadius: 9,
-    elevation: 4,
-    margin: 5,
-    padding: 10,
-    backgroundColor: '#fe5b29',
-    width: Dimensions.get('window').width - 60,
-    alignItems: 'center'
-  },
-  uploadButtonText: {
-    color: '#f6f5f8',
-    fontSize: 20,
-    fontFamily: 'Roboto'
-  },
-  imageContainer: {
-    height: Dimensions.get('window').height
-  },
-  backgroundImage: {
-    flex: 1,
-    resizeMode: 'cover',
-  },
-})
 
 const AddProductScreen = ({ navigation }) => {
   const [name, setName] = useState('')
@@ -150,7 +86,6 @@ const AddProductScreen = ({ navigation }) => {
             index: 0,
             routes: [{ name: 'Home' }]
           })
-          //storageRef.putFile(photo)
         } catch (error) {
           console.log(error)
         }
@@ -205,5 +140,68 @@ const AddProductScreen = ({ navigation }) => {
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  boxContainer: {
+    backgroundColor: '#1C1F1F',
+    width: '100%',
+    height: '96.5%'
+  },
+  button: {
+    backgroundColor: '#33B5FF',
+    color: 'white'
+  },
+  inputView: {
+    backgroundColor: "#393B38",
+    borderRadius: 30,
+    width: "70%",
+    height: 70,
+    marginLeft: 40,
+    marginBottom: 5,
+    alignItems: "center",
+  },
+  input: {
+    height: 50,
+    flex: 1,
+    padding: 10,
+    margin: 5,
+    color: 'white'
+  },
+  smallText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 18,
+    marginTop: 18,
+  },
+  uploadButton: {
+    borderRadius: 16,
+    alignSelf: 'center',
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 7,
+      height: 5,
+    },
+    shadowOpacity: 1.58,
+    shadowRadius: 9,
+    elevation: 4,
+    margin: 5,
+    padding: 10,
+    backgroundColor: '#fe5b29',
+    width: Dimensions.get('window').width - 60,
+    alignItems: 'center'
+  },
+  uploadButtonText: {
+    color: '#f6f5f8',
+    fontSize: 20,
+    fontFamily: 'Roboto'
+  },
+  imageContainer: {
+    height: Dimensions.get('window').height
+  },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
+})
 
 export default AddProductScreen

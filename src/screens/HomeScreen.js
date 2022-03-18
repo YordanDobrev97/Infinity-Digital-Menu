@@ -1,16 +1,14 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   StyleSheet,
   View,
   Text,
   FlatList,
-  Button,
   TouchableOpacity
 } from 'react-native'
 import Header from '../components/Header/index'
 import Product from '../components/Product/index'
 import { firestore } from '../firebase/config'
-import CartContext from '../context/CartContext'
 
 const HomeScreen = ({ navigation }) => {
   const [products, setProducts] = useState([])

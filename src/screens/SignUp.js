@@ -4,6 +4,46 @@ import { Text, TouchableOpacity, View, StyleSheet, TextInput } from 'react-nativ
 import { auth } from '../firebase/config'
 import AuthContext from '../context/AuthContext'
 
+const SignUp = (props) => {
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const context = useContext(AuthContext)
+
+    const onSignUpHandler = async () => {
+        await auth.createUserWithEmailAndPassword(email, password)
+        context.loggedIn(true)
+        props.navigation.navigate('Admin')
+    }
+
+    return (
+        <View style={styles.container}>
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Email"
+                    placeholderTextColor="white"
+                    onChangeText={(email) => setEmail(email)}
+                />
+            </View>
+
+            <View style={styles.inputView}>
+                <TextInput
+                    style={styles.textInput}
+                    placeholder="Password"
+                    placeholderTextColor="white"
+                    secureTextEntry={true}
+                    onChangeText={(password) => setPassword(password)}
+                />
+            </View>
+
+            <TouchableOpacity onPress={onSignUpHandler} style={styles.button}>
+                <Text style={styles.text}>Регистрация</Text>
+            </TouchableOpacity>
+        </View>
+    )
+}
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -42,46 +82,5 @@ const styles = StyleSheet.create({
         color: 'white'
     }
 })
-
-const SignUp = (props) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [message, setMessage] = useState('')
-
-    const context = useContext(AuthContext)
-
-    const onSignUpHandler = async () => {
-        await auth.createUserWithEmailAndPassword(email, password)
-        context.loggedIn(true)
-        props.navigation.navigate('Admin')
-    }
-
-    return (
-        <View style={styles.container}>
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Email"
-                    placeholderTextColor="white"
-                    onChangeText={(email) => setEmail(email)}
-                />
-            </View>
-
-            <View style={styles.inputView}>
-                <TextInput
-                    style={styles.textInput}
-                    placeholder="Password"
-                    placeholderTextColor="white"
-                    secureTextEntry={true}
-                    onChangeText={(password) => setPassword(password)}
-                />
-            </View>
-
-            <TouchableOpacity onPress={onSignUpHandler} style={styles.button}>
-                <Text style={styles.text}>Регистрация</Text>
-            </TouchableOpacity>
-        </View>
-    )
-}
 
 export default SignUp

@@ -33,12 +33,10 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         color: 'white'
     },
-
     forgot_button: {
         height: 30,
         marginBottom: 30,
     },
-
     loginBtn: {
         width: "80%",
         borderRadius: 25,
@@ -50,12 +48,20 @@ const styles = StyleSheet.create({
     },
     loginText: {
         color: 'white'
+    },
+    error: {
+        backgroundColor: 'red',
+        color: 'white',
+        fontSize: 19,
+        margin: 5,
+        padding: 10,
+        borderRadius: 4,
     }
 })
 
 const Login = (props) => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
     const [message, setMessage] = useState('')
 
     const context = useContext(AuthContext)
@@ -69,14 +75,14 @@ const Login = (props) => {
                     context.loggedIn(true)
                     props.navigation.navigate('Admin')
                 })
-                .catch(error => alert(error.message))
+                .catch(error => setMessage(error.message))
         }
     }
 
     return (
         <View style={styles.container}>
             {message ? (
-                <Text>{message}</Text>
+                <Text style={styles.error}>{message}</Text>
             ) : (
                 <Text></Text>
             )}
@@ -100,12 +106,8 @@ const Login = (props) => {
                 />
             </View>
 
-            <TouchableOpacity>
-                <Text style={styles.forgot_button}>Forgot Password?</Text>
-            </TouchableOpacity>
-
             <TouchableOpacity onPress={loginHandler} style={styles.loginBtn}>
-                <Text style={styles.loginText}>LOGIN</Text>
+                <Text style={styles.loginText}>Вход</Text>
             </TouchableOpacity>
         </View>
     )

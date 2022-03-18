@@ -5,7 +5,6 @@ import {
     Image,
     TouchableOpacity,
     Modal,
-    Button,
     StyleSheet
 } from 'react-native'
 import { Icon } from 'native-base'
@@ -34,7 +33,9 @@ const styles = StyleSheet.create({
     navItemText: {
         color: 'white',
         fontSize: 24,
-        textAlign: 'center'
+        textAlign: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'white'
     },
 })
 
@@ -43,7 +44,12 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
         setShowMenu(false)
     }
     const context = useContext(AuthContext)
-    console.log(context)
+
+    const logout = () => {
+        context.loggedIn(false)
+        navigation.navigate('Home')
+    }
+
     return (
         <Modal visible={showMenu}>
             <View style={styles.sidebarContainer}>
@@ -90,9 +96,14 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                                 </TouchableOpacity>
                             </View>
                         ) : (
-                            <Button
-                                onPress={() => navigation.navigate('Admin')}
-                                title='Администрация' />
+                            <View>
+                                <TouchableOpacity onPress={() => navigation.navigate('Admin')}>
+                                    <Text style={styles.navItemText}>Администрация</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={logout}>
+                                    <Text style={styles.navItemText}>Изход</Text>
+                                </TouchableOpacity>
+                            </View>
                         )}
                     </View>
                 </View>

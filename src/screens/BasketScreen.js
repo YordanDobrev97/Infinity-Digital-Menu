@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { FlatList } from 'react-native'
 import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CartContext from '../context/CartContext'
 
-import { firestore } from '../firebase/config'
 const { width } = Dimensions.get("window")
 
 const BasketScreen = ({ navigation }) => {
