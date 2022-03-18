@@ -99,7 +99,7 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 2,
-    height: '80%',
+    height: '90%',
     backgroundColor: 'black',
     marginTop: 20,
   },

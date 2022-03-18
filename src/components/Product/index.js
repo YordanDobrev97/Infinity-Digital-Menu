@@ -38,18 +38,25 @@ const Product = ({ id, name, price, image }) => {
   return (
     <View style={styles.product}>
       <View style={styles.container}>
-        <Image
-          resizeMode={"contain"}
-          style={{ width: width / 3, height: width / 3 }}
-          source={{ uri: image }} />
+        <View>
+          <Image
+            resizeMode={"contain"}
+            style={{ width: width / 3, height: width / 3 }}
+            source={{ uri: image }} />
+        </View>
 
-        <Text style={styles.productName}>{name}</Text>
-        <Text style={styles.productPrice}>Цена: {price} лв.</Text>
-        {flag ? (
-          <Button title='Премахни' onPress={onRemoveProduct} />
-        ) : (
-          <Button title='Добави в кошницата' onPress={onAddProduct} />
-        )}
+        <View>
+          <Text style={styles.productName}>{name}</Text>
+          <Text style={styles.productPrice}>Цена: {price} лв.</Text>
+        </View>
+
+        <View>
+          {flag ? (
+            <Button title='Премахни' onPress={onRemoveProduct} />
+          ) : (
+            <Button title='Добави в кошницата' onPress={onAddProduct} />
+          )}
+        </View>
         <View style={styles.productCount}>
           <TouchableOpacity style={styles.button} onPress={() => setCount((prevValue) => prevValue - 1)}>
             <Text style={styles.buttonText}>-</Text>
@@ -69,14 +76,14 @@ const Product = ({ id, name, price, image }) => {
 const styles = StyleSheet.create({
   product: {
     width: '100%',
-    height: '33%',
+    height: '30%',
     margin: 3,
     padding: 8,
-    backgroundColor: '#0C2035',
+    // backgroundColor: '#0C2035',
   },
   productName: {
     color: '#ffff',
-    fontSize: 27,
+    fontSize: 20,
   },
   productImage: {
     width: '60%',
@@ -84,15 +91,15 @@ const styles = StyleSheet.create({
   },
   productPrice: {
     color: 'orange',
-    fontSize: 18
+    fontSize: 16
   },
   line: {
     borderBottomWidth: 2,
     borderBottomColor: '#FE5F4A'
   },
   container: {
-    width: '90%',
-    backgroundColor: '#176268',
+    width: '100%',
+    //backgroundColor: '#176268',
     borderRadius: 20,
     margin: 0,
     padding: 1,

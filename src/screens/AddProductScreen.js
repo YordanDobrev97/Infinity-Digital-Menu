@@ -130,7 +130,7 @@ const AddProductScreen = ({ navigation }) => {
           return downloadURL
         });
       })
-      return url
+    return url
   }
 
   const onAddProduct = async () => {
@@ -184,13 +184,9 @@ const AddProductScreen = ({ navigation }) => {
             style={styles.input}
             placeholder='Описание на продукта'
             placeholderTextColor={'white'}
-            onChangeText={value => setPrice(value)}
+            onChangeText={value => setDescription(value)}
           />
         </View>
-
-        {/* <View style={{ marginBottom: 20, height: 30, flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-          {photo && <Image source={{ uri: photo }} style={{ width: 100, height: 50 }} />}
-        </View> */}
 
         <View>
           <TouchableOpacity
