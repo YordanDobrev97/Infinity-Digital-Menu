@@ -17,6 +17,12 @@ const BasketScreen = ({ navigation }) => {
         })
     }
 
+    const removeProduct = (id) => {
+        const products = [...context.products]
+        const filteredProducts = products.filter((p) => p.id !== id);
+        context.setProducts(filteredProducts)
+    }
+
     const renderItem = ({ item }) => {
         return (
             <View style={{ flex: 1, height: '30%' }}>
@@ -35,7 +41,7 @@ const BasketScreen = ({ navigation }) => {
                                 {item.count} x {item.price}
                             </Text>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <TouchableOpacity style={{ backgroundColor: '#dae2e4', padding: 8, borderRadius: 12 }}>
+                                <TouchableOpacity onPress={() => removeProduct(item.id)} style={{ backgroundColor: '#dae2e4', padding: 8, borderRadius: 12 }}>
                                     <Text>Премахни</Text>
                                 </TouchableOpacity>
                             </View>
