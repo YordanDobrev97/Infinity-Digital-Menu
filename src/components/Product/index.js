@@ -2,19 +2,23 @@ import React, { useState, useContext, useEffect } from 'react'
 import {
   Text,
   Image,
+  Modal,
   View,
   StyleSheet,
   Button,
   TouchableOpacity,
   Dimensions,
+  Pressable
 } from 'react-native'
 import CartContext from '../../context/CartContext'
 
 const { width } = Dimensions.get("window")
 
-const Product = ({ id, name, price, image }) => {
+const Product = ({ id, name, price, image, description }) => {
   const [flag, setFlag] = useState(false)
   const [count, setCount] = useState(0)
+  const [showDetails, setShowDetails] = useState(false)
+
   const context = useContext(CartContext)
 
   useEffect(() => {
@@ -39,10 +43,37 @@ const Product = ({ id, name, price, image }) => {
     <View style={styles.product}>
       <View style={styles.container}>
         <View>
-          <Image
-            resizeMode={"contain"}
-            style={{ width: width / 3, height: width / 3 }}
-            source={{ uri: image }} />
+          <Pressable onPress={() => setShowDetails(true)}>
+            <Image
+              resizeMode={"contain"}
+              style={{ width: width / 3, height: width / 3 }}
+              source={{ uri: image }} />
+          </Pressable>
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showDetails}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Pressable
+                  style={[styles.buttonClose]}
+                >
+                  <Image
+                    resizeMode={"contain"}
+                    style={{ width: width / 2, height: width / 3 }}
+                    source={{ uri: image }} />
+
+                  <Text style={styles.descriptionText}>Описание:</Text>
+                  <Text style={styles.description}>{description}</Text>
+
+                  <TouchableOpacity style={styles.close} onPress={() => setShowDetails(false)}>
+                    <Text style={styles.textStyle}>Затвори</Text>
+                  </TouchableOpacity>
+                </Pressable>
+              </View>
+            </View>
+          </Modal>
         </View>
 
         <View>
@@ -124,6 +155,41 @@ const styles = StyleSheet.create({
     height: 30,
     margin: 6,
     backgroundColor: '#FE9A28'
+  },
+  description: {
+    color: '#e6ba45'
+  },
+  descriptionText: {
+    color: '#d5b60a'
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 0
+  },
+  modalView: {
+    margin: 0,
+    backgroundColor: "#29304e",
+    borderRadius: 20,
+    padding: 110,
+    alignItems: "center",
+  },
+  close: {
+    backgroundColor: "orange",
+    marginTop: 15,
+    padding: 5,
+    maxWidth: '60%',
+    borderRadius: 20,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 5,
+    textAlign: "center"
   }
 });
 

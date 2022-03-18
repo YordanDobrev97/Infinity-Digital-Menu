@@ -50,6 +50,7 @@ const HomeScreen = ({ navigation }) => {
         name={item.name}
         image={item.photoUrl}
         price={item.price}
+        description={item.description}
       />
     )
   }
