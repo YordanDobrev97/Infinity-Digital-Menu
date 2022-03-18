@@ -83,12 +83,14 @@ const HomeScreen = ({ navigation }) => {
       </View>
 
       <View style={{ marginTop: 28, flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity style={styles.button} onPress={onNextPage}>
-          <Text>Следваща страница</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={onPreviosPage}>
+
+        {currentCount > 0 && <TouchableOpacity style={styles.button} onPress={onPreviosPage}>
           <Text>Предишна страница</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
+
+        {maxCount < products.length && <TouchableOpacity disabled={currentCount === products.length} style={styles.button} onPress={onNextPage}>
+          <Text>Следваща страница</Text>
+        </TouchableOpacity>}
       </View>
     </View>
   )
