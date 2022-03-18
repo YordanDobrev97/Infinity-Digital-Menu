@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
   product: {
     width: '100%',
     height: '33%',
-    margin: 0,
+    margin: 3,
     padding: 8,
     backgroundColor: '#0C2035',
   },
@@ -92,7 +92,6 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '90%',
-    minHeight: '20%',
     backgroundColor: '#176268',
     borderRadius: 20,
     margin: 0,
@@ -106,7 +105,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 0,
     marginBottom: 0,
-    backgroundColor: 'grey',
     width: '40%',
   },
   buttonText: {

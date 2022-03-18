@@ -29,6 +29,7 @@ const HomeScreen = ({ navigation }) => {
     fetchProducts()
       .then((res) => {
         setProducts(res)
+        console.log('All data: ', res)
         setLoading(false)
       })
   }, [])
@@ -53,7 +54,21 @@ const HomeScreen = ({ navigation }) => {
     )
   }
 
-  const currentProducts = products.splice(currentCount, maxCount)
+  const onNextPage = async () => {
+    if (maxCount < products.length) {
+      setCurrentCount(maxCount)
+      setMaxCount(maxCount + 3)
+    }
+  }
+
+  const onPreviosPage = async () => {
+    if (!(currentCount === 0 && maxCount === 3)) {
+      setCurrentCount(currentCount - 3);
+      setMaxCount(maxCount - 3);
+    }
+  }
+
+  const currentProducts = products.slice(currentCount, maxCount)
 
   return (
     <View style={styles.wrapper}>
@@ -67,11 +82,15 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={{ marginTop: 28 }}>
-        <Button title='Следваща страница' />
+      <View style={{ marginTop: 28, flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity style={styles.button} onPress={onNextPage}>
+          <Text>Следваща страница</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.button} onPress={onPreviosPage}>
+          <Text>Предишна страница</Text>
+        </TouchableOpacity>
       </View>
     </View>
-
   )
 };
 
@@ -82,14 +101,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     marginTop: 20,
   },
-
   scrollView: {
     borderWidth: 5,
-    borderColor: '#303B4E'
   },
   productContainer: {
     width: '100%',
     height: '70%',
+  },
+  button: {
+    backgroundColor: 'orange',
+    maxWidth: '50%',
+    padding: 8,
+    borderRadius: 16,
+    fontSize: 21,
   }
 });
 
