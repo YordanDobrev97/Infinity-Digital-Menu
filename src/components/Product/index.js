@@ -9,34 +9,15 @@ import {
   Dimensions,
 } from 'react-native'
 import CartContext from '../../context/CartContext'
-import { storage } from '../../firebase/config'
 
 const { width } = Dimensions.get("window")
 
 const Product = ({ id, name, price, image }) => {
   const [flag, setFlag] = useState(false)
   const [count, setCount] = useState(0)
-  const [imageUrl, setImageUrl] = useState('')
   const context = useContext(CartContext)
 
   useEffect(() => {
-    const fetchImage = async () => {
-      const lastIndex = image.lastIndexOf('/') + 1
-      const fileName = image.substring(lastIndex)
-      var storageRef = storage().ref(fileName)
-      await storageRef.put(image)
-
-      const photoUrl = await storageRef.getDownloadURL()
-      return photoUrl
-    }
-
-    setImageUrl(image)
-    // fetchImage()
-    //   .then((url) => {
-    //     console.log('URL IMAGE ==  ', url)
-    //     //setImageUrl(url)
-    //   })
-
   }, [])
 
   const onAddProduct = () => {
@@ -60,7 +41,7 @@ const Product = ({ id, name, price, image }) => {
         <Image
           resizeMode={"contain"}
           style={{ width: width / 3, height: width / 3 }}
-          source={{ uri: imageUrl }} />
+          source={{ uri: image }} />
 
         <Text style={styles.productName}>{name}</Text>
         <Text style={styles.productPrice}>Цена: {price} лв.</Text>
@@ -88,8 +69,8 @@ const Product = ({ id, name, price, image }) => {
 const styles = StyleSheet.create({
   product: {
     width: '100%',
-    maxHeight: '90%',
-    margin: 5,
+    height: '33%',
+    margin: 0,
     padding: 8,
     backgroundColor: '#0C2035',
   },
@@ -123,11 +104,10 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
-    marginTop: 8,
-    marginBottom: 18,
+    marginTop: 0,
+    marginBottom: 0,
     backgroundColor: 'grey',
     width: '40%',
-    height: '15%',
   },
   buttonText: {
     textAlign: 'center',

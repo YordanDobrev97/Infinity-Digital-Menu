@@ -67,8 +67,8 @@ const HomeScreen = ({ navigation }) => {
         />
       </View>
 
-      <View style={{marginTop: 28}}>
-      <Button title='Следваща страница' />
+      <View style={{ marginTop: 28 }}>
+        <Button title='Следваща страница' />
       </View>
     </View>
 
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
   wrapper: {
     flex: 2,
     height: '80%',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+    marginTop: 20,
   },
 
   scrollView: {
@@ -88,7 +89,7 @@ const styles = StyleSheet.create({
   },
   productContainer: {
     width: '100%',
-    height: '80%',
+    height: '70%',
   }
 });
 
