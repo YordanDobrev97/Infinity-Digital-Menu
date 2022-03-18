@@ -65,23 +65,30 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                     </View>
 
                     <View style={styles.navItem}>
-                            <Icon name='cart' style={{ color: 'white' }} />
-                            <Button title={'Кошница'} onPress={() => navigation.navigate('Basket')}/>
-                    </View>
-
-                    <View style={styles.navItem}>
-                        <Text style={styles.navItemText}>
-                            <Icon name='menu' style={{ color: 'white' }} />
-                            Категории
-                        </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('Basket')}>
+                            <Text style={styles.navItemText}>
+                                <Icon name='cart' style={{ color: 'white', fontSize: 26 }} />
+                                Кошница</Text>
+                        </TouchableOpacity>
                     </View>
 
                     <View style={styles.navItem}>
                         {!context.isAuth ? (
-                            <Button title='Вход' onPress={() => {
-                                setShowMenu(false)
-                                navigation.navigate('Login')
-                            }} />
+                            <View>
+                                <TouchableOpacity onPress={() => {
+                                    setShowMenu(false)
+                                    navigation.navigate('Login')
+                                }}>
+                                    <Text style={styles.navItemText}>Вход</Text>
+                                </TouchableOpacity>
+
+                                <TouchableOpacity onPress={() => {
+                                    setShowMenu(false)
+                                    navigation.navigate('SignUp')
+                                }}>
+                                    <Text style={styles.navItemText}>Регистрация</Text>
+                                </TouchableOpacity>
+                            </View>
                         ) : (
                             <Button
                                 onPress={() => navigation.navigate('Admin')}
