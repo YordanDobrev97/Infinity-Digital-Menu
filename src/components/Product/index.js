@@ -39,6 +39,12 @@ const Product = ({ id, name, price, image, description }) => {
     context.setProducts(latestProducts)
   }
 
+  const decrementQuantity = () => {
+    if (count > 0) {
+      setCount((prevValue) => prevValue - 1)
+    }
+  }
+
   return (
     <View style={styles.product}>
       <View style={styles.container}>
@@ -89,7 +95,7 @@ const Product = ({ id, name, price, image, description }) => {
           )}
         </View>
         <View style={styles.productCount}>
-          <TouchableOpacity style={styles.button} onPress={() => setCount((prevValue) => prevValue - 1)}>
+          <TouchableOpacity style={styles.button} onPress={decrementQuantity}>
             <Text style={styles.buttonText}>-</Text>
           </TouchableOpacity>
           <Text style={styles.buttonText}>{count}</Text>
