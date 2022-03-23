@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
     sidebarContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#201C1E',
+        backgroundColor: '#AC7F24',
         color: 'white'
     },
     closeIcon: {

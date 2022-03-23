@@ -27,7 +27,9 @@ const CustomHeader = ({ navigation }) => {
   return (
     <View style={styles.header}>
       <View>
-        <Icon name='menu' style={{ fontSize: 32 }} />
+        <TouchableOpacity onPress={showMenuHandler}>
+          <Icon name='menu' style={{ fontSize: 32 }} />
+        </TouchableOpacity>
       </View>
       <View style={{ display: 'flex', justifyContent: 'center' }}>
         <Text style={{ textAlign: 'center', color: '#ffff', fontSize: 20 }}>Inifinity Digital Menu</Text>
