@@ -1,10 +1,19 @@
 import React, { useState } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
-import { Icon } from 'native-base'
+import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native'
+import {
+  Container,
+  Header,
+  Body,
+  Title,
+  Left,
+  Icon,
+  Button,
+  Right,
+} from 'native-base'
 
 import Sidebar from '../Sidebar/Sidebar'
 
-const Header = ({ navigation }) => {
+const CustomHeader = ({ navigation }) => {
   const [showMenu, setShowMenu] = useState(false)
 
   const showMenuHandler = () => {
@@ -17,14 +26,14 @@ const Header = ({ navigation }) => {
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity
-        style={styles.iconContainer}
-        onPress={showMenuHandler}>
-        <Icon name='menu' style={styles.icon} />
-      </TouchableOpacity>
-
-      <View style={{ width: '80%', margin: 'auto' }}>
-        <Text style={styles.headerText}>Digital Menu</Text>
+      <View>
+        <Icon name='menu' style={{ fontSize: 32 }} />
+      </View>
+      <View style={{ display: 'flex', justifyContent: 'center' }}>
+        <Text style={{ textAlign: 'center', color: '#ffff', fontSize: 20 }}>Inifinity Digital Menu</Text>
+      </View>
+      <View>
+        <Icon name='cart' style={{ fontSize: 32 }} />
       </View>
     </View>
   )
@@ -32,13 +41,14 @@ const Header = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   header: {
-    width: '100%',
-    height: '10%',
+    maxWidth: '100%',
     display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'black',
-    padding: 0
+    justifyContent: 'space-between',
+    backgroundColor: '#AC7F24',
+    padding: 12,
+    marginTop: 25,
+    fontSize: 32
   },
   headerText: {
     fontWeight: 'bold',
@@ -58,4 +68,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default Header
+export default CustomHeader
