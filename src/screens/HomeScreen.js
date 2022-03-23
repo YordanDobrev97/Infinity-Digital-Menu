@@ -5,6 +5,7 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
+  Button,
   Dimensions,
 } from 'react-native'
 
@@ -12,19 +13,17 @@ import Header from '../components/Header/index'
 import Product from '../components/Product/index'
 import { firestore } from '../firebase/config'
 
+import ScreenOrientation from 'expo-screen-orientation';
+
 const HomeScreen = ({ navigation }) => {
   const [products, setProducts] = useState([])
   const [orientation, setOrientation] = useState('portrait')
   const [isLoading, setLoading] = useState(true)
-
-  const isPortrait = () => {
-    const dim = Dimensions.get('screen')
-    return dim.height >= dim.width
-  }
-
-  useEffect(() => {
-
-  })
+  const [currentHeight, setHeight] = useState(Dimensions.get('screen').height)
+  const [currentWidth, setWidth] = useState(Dimensions.get('screen').width)
+  const [currentCount, setCurrentCount] = useState(0)
+  const [maxCount, setMaxCount] = useState(10)
+  const [productsPerPage, setProductsPerPage] = useState(2)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -35,12 +34,31 @@ const HomeScreen = ({ navigation }) => {
     }
 
     fetchProducts()
-      .then((res) => {
+      .then(async (res) => {
         setProducts(res)
-        console.log('All data: ', res)
         setLoading(false)
       })
   }, [])
+
+  useEffect(() => {
+    if (!isPortrait()) {
+      setOrientation('landscape')
+      setProductsPerPage(3)
+    } else {
+      setOrientation('portrait')
+      setProductsPerPage(2)
+    }
+  }, [currentHeight, currentWidth])
+
+  Dimensions.addEventListener('change', () => {
+    setHeight(Dimensions.get('screen').height)
+    setWidth(Dimensions.get('screen').width)
+  })
+
+  const isPortrait = () => {
+    const dim = Dimensions.get('screen')
+    return dim.height >= dim.width
+  }
 
   if (isLoading) {
     return (
@@ -59,13 +77,37 @@ const HomeScreen = ({ navigation }) => {
         image={item.photoUrl}
         price={item.price}
         description={item.description}
+        orientation={orientation}
       />
     )
   }
 
+  const currentProducts = products;
+
   return (
-    <View>
+    <View style={styles.wrapper}>
       <Header navigation={navigation} />
+
+      <View style={styles.portrait}>
+        {productsPerPage === 2 ? (
+          <FlatList
+            key={'_'}
+            keyExtractor={(item) => '_' + item.id}
+            data={currentProducts}
+            renderItem={renderItem}
+            numColumns={productsPerPage}
+          />
+        ) : (
+          <FlatList
+            key={'#'}
+            keyExtractor={(item) => '#' + item.id}
+            data={currentProducts}
+            renderItem={renderItem}
+            numColumns={productsPerPage}
+          />
+        )}
+      </View>
+
     </View>
   )
 
@@ -73,17 +115,13 @@ const HomeScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    flex: 2,
-    height: '90%',
     backgroundColor: 'black',
-    marginTop: 20,
   },
-  scrollView: {
-    borderWidth: 5,
-  },
-  productContainer: {
-    width: '100%',
+  portrait: {
+    minWidth: '100%',
     height: '70%',
+    margin: 'auto',
+    backgroundColor: 'black',
   },
   button: {
     backgroundColor: 'orange',

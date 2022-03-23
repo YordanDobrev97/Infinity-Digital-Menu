@@ -1,15 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native'
-import {
-  Container,
-  Header,
-  Body,
-  Title,
-  Left,
-  Icon,
-  Button,
-  Right,
-} from 'native-base'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 import Sidebar from '../Sidebar/Sidebar'
 
@@ -28,14 +19,14 @@ const CustomHeader = ({ navigation }) => {
     <View style={styles.header}>
       <View>
         <TouchableOpacity onPress={showMenuHandler}>
-          <Icon name='menu' style={{ fontSize: 32 }} />
+          <Icon name='bars' style={{ fontSize: 32 }} />
         </TouchableOpacity>
       </View>
       <View style={{ display: 'flex', justifyContent: 'center' }}>
         <Text style={{ textAlign: 'center', color: '#ffff', fontSize: 20 }}>Inifinity Digital Menu</Text>
       </View>
       <View>
-        <Icon name='cart' style={{ fontSize: 32 }} />
+        <Icon name='shopping-cart' style={{ fontSize: 32 }} />
       </View>
     </View>
   )

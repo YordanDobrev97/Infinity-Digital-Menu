@@ -7,7 +7,7 @@ import {
     Modal,
     StyleSheet
 } from 'react-native'
-import { Icon } from 'native-base'
+import Icon from 'react-native-vector-icons'
 
 import AuthContext from '../../context/AuthContext'
 
