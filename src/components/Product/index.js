@@ -20,7 +20,7 @@ const Product = ({ id, name, price, image, description, orientation }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const context = useContext(CartContext)
-
+  console.log('Products count === ' + context.products.length)
   useEffect(() => {
   }, [])
 
@@ -33,10 +33,10 @@ const Product = ({ id, name, price, image, description, orientation }) => {
 
   const onRemoveProduct = () => {
     const latestProducts = context.products.filter((i) => {
-      return i !== id
+      return i.id !== id
     })
-    setFlag(false)
     context.setProducts(latestProducts)
+    setFlag(false)
   }
 
   const decrementQuantity = () => {

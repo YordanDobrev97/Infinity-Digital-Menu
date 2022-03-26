@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
@@ -6,10 +6,15 @@ import Sidebar from '../Sidebar/Sidebar'
 import CartContext from '../../context/CartContext'
 
 const CustomHeader = ({ navigation }) => {
-  const [showMenu, setShowMenu] = useState(false)
-
   const context = useContext(CartContext)
-  console.log(context.products.length)
+
+  const [showMenu, setShowMenu] = useState(false)
+  const [countProducts, setCountProducts] = useState(context.products.length)
+
+  useEffect(() => {
+    setCountProducts(context.products.length)
+    console.log('Change count: ' + context.products.length)
+  }, [context.products.length])
 
   const showMenuHandler = () => {
     setShowMenu(true)
@@ -31,9 +36,15 @@ const CustomHeader = ({ navigation }) => {
       </View>
       <View>
         <Icon name='shopping-cart' style={{ fontSize: 32 }} />
-        <View style={styles.iconCart}>
-          <Text style={styles.countCart}>{context.products.length}</Text>
-        </View>
+        {context.products.length > 0 ? (
+          <View style={styles.iconCart}>
+            <Text style={styles.countCart}>{context.products.length}</Text>
+          </View>
+        ) : (
+          <>
+          </>
+        )}
+
       </View>
     </View>
   )
