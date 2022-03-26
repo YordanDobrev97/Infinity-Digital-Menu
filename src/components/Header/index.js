@@ -1,11 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { View, Text, TouchableOpacity, StyleSheet, SafeAreaView } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 
 import Sidebar from '../Sidebar/Sidebar'
+import CartContext from '../../context/CartContext'
 
 const CustomHeader = ({ navigation }) => {
   const [showMenu, setShowMenu] = useState(false)
+
+  const context = useContext(CartContext)
+  console.log(context.products.length)
 
   const showMenuHandler = () => {
     setShowMenu(true)
@@ -27,6 +31,9 @@ const CustomHeader = ({ navigation }) => {
       </View>
       <View>
         <Icon name='shopping-cart' style={{ fontSize: 32 }} />
+        <View style={styles.iconCart}>
+          <Text style={styles.countCart}>{context.products.length}</Text>
+        </View>
       </View>
     </View>
   )
@@ -59,6 +66,21 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: 40,
   },
+  iconCart: {
+    backgroundColor: '#ff6600',
+    position: 'absolute',
+    bottom: 25,
+    right: 0,
+    width: 15,
+    height: 15,
+    borderRadius: 200,
+    fontSize: 16
+  },
+  countCart: {
+    textAlign: 'center',
+    color: '#FFFF',
+    fontSize: 12
+  }
 })
 
 export default CustomHeader
