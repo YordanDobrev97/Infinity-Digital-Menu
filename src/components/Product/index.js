@@ -138,8 +138,14 @@ const styles = StyleSheet.create({
     color: '#ffff',
     fontSize: 20,
   },
-  button: {
-
+  productName: {
+    color: '#ffff',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  productPrice: {
+    color: 'orange',
+    fontSize: 16
   },
   buttonToCart: {
     backgroundColor: '#C79038',

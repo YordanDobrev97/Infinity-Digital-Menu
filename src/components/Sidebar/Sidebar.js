@@ -7,43 +7,16 @@ import {
     Modal,
     StyleSheet
 } from 'react-native'
-import Icon from 'react-native-vector-icons'
+import Icon from 'react-native-vector-icons/FontAwesome'
 
 import AuthContext from '../../context/AuthContext'
 
-const styles = StyleSheet.create({
-    sidebarContainer: {
-        width: '100%',
-        height: '100%',
-        backgroundColor: '#AC7F24',
-        color: 'white'
-    },
-    closeIcon: {
-        color: '#ffff'
-    },
-    navItemContainer: {
-        margin: 4
-    },
-    navItem: {
-        color: 'white',
-        borderBottomWidth: 1,
-        margin: 3,
-        borderBottomColor: 'white'
-    },
-    navItemText: {
-        color: 'white',
-        fontSize: 24,
-        textAlign: 'center',
-        borderBottomWidth: 1,
-        borderBottomColor: 'white'
-    },
-})
-
 const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
+    const context = useContext(AuthContext)
+
     const closeMenu = () => {
         setShowMenu(false)
     }
-    const context = useContext(AuthContext)
 
     const logout = () => {
         context.loggedIn(false)
@@ -58,6 +31,7 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                         uri: 'https://upload.wikimedia.org/wikipedia/commons/4/47/Hamburger_%28black_bg%29.jpg'
                     }}
                 />
+
                 <TouchableOpacity onPress={closeMenu}>
                     <Icon name='close' style={styles.closeIcon} />
                 </TouchableOpacity>
@@ -65,7 +39,7 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                 <View style={styles.navItemContainer}>
                     <View style={styles.navItem}>
                         <Text style={styles.navItemText}>
-                            <Icon name='home' style={{ color: 'white' }} />
+                            <Icon name='home' style={{ color: 'white', fontSize: 22 }} />
                             Начало
                         </Text>
                     </View>
@@ -73,7 +47,7 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                     <View style={styles.navItem}>
                         <TouchableOpacity onPress={() => navigation.navigate('Basket')}>
                             <Text style={styles.navItemText}>
-                                <Icon name='cart' style={{ color: 'white', fontSize: 26 }} />
+                                <Icon name='shopping-cart' style={{ color: 'white', fontSize: 22 }} />
                                 Кошница</Text>
                         </TouchableOpacity>
                     </View>
@@ -108,9 +82,37 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                     </View>
                 </View>
             </View>
-
         </Modal>
     )
 }
+
+const styles = StyleSheet.create({
+    sidebarContainer: {
+        width: '100%',
+        height: '100%',
+        backgroundColor: '#AC7F24',
+        color: 'white'
+    },
+    closeIcon: {
+        color: '#ffff',
+        fontSize: 22
+    },
+    navItemContainer: {
+        margin: 4
+    },
+    navItem: {
+        color: 'white',
+        borderBottomWidth: 1,
+        margin: 3,
+        borderBottomColor: 'white'
+    },
+    navItemText: {
+        color: 'white',
+        fontSize: 24,
+        textAlign: 'center',
+        borderBottomWidth: 1,
+        borderBottomColor: 'white'
+    },
+})
 
 export default Sidebar

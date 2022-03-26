@@ -43,7 +43,7 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     if (!isPortrait()) {
       setOrientation('landscape')
-      setProductsPerPage(3)
+      setProductsPerPage(4)
     } else {
       setOrientation('portrait')
       setProductsPerPage(2)
@@ -116,12 +116,16 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: 'black',
+    maxWidth: '100%'
   },
   portrait: {
     minWidth: '100%',
-    height: '70%',
+    height: '99%',
     margin: 'auto',
     backgroundColor: 'black',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   button: {
     backgroundColor: 'orange',
