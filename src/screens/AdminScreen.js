@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: '#4D4B9F'
+    backgroundColor: "#3D3B3C"
   },
   top: {
     marginTop: 50,
@@ -62,16 +62,17 @@ const styles = StyleSheet.create({
   },
   actions: {
     width: '100%',
-    height: '40%',
+    height: '50%',
     padding: 10,
-    backgroundColor: '#281046'
+    marginTop: '10%',
+    backgroundColor: '#252837'
   },
   products: {
     width: '90%',
     height: '70%',
     margin: 11,
     borderRadius: 20,
-    backgroundColor: '#751AD1'
+    backgroundColor: '#626262'
   },
   productText: {
     color: '#ffff',
@@ -79,7 +80,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   addProduct: {
-    backgroundColor: '#FF4262',
+    backgroundColor: '#BCBDBF',
     color: '#ffff',
     width: '40%',
     padding: 10,
@@ -94,7 +95,7 @@ const styles = StyleSheet.create({
   },
   back: {
     fontSize: 17,
-    backgroundColor: '#3E7FD7',
+    backgroundColor: '#4C4D4F',
     width: '70%',
     marginTop: 8,
     marginLeft: '15%',

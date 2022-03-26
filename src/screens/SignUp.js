@@ -47,7 +47,7 @@ const SignUp = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#fff",
+        backgroundColor: "#3D3B3C",
         alignItems: "center",
         justifyContent: "center",
     },

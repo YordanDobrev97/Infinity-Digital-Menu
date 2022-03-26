@@ -143,9 +143,9 @@ const AddProductScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   boxContainer: {
-    backgroundColor: '#1C1F1F',
+    backgroundColor: '#252837',
     width: '100%',
-    height: '96.5%'
+    height: '96.5%',
   },
   button: {
     backgroundColor: '#33B5FF',
@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#393B38",
     borderRadius: 30,
     width: "70%",
-    height: 70,
+    height: '15%',
     marginLeft: 40,
     marginBottom: 5,
     alignItems: "center",
