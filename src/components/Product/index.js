@@ -16,11 +16,10 @@ const { width, height } = Dimensions.get("screen")
 
 const Product = ({ id, name, price, image, description, orientation }) => {
   const [flag, setFlag] = useState(false)
-  const [count, setCount] = useState(0)
+  const [count, setCount] = useState(1)
   const [showDetails, setShowDetails] = useState(false)
 
   const context = useContext(CartContext)
-  console.log('Products count === ' + context.products.length)
   useEffect(() => {
   }, [])
 
@@ -39,108 +38,66 @@ const Product = ({ id, name, price, image, description, orientation }) => {
     setFlag(false)
   }
 
-  const decrementQuantity = () => {
-    if (count > 0) {
-      setCount((prevValue) => prevValue - 1)
-    }
-  }
-
   return (
-    <View style={{
-      width: orientation === 'landscape' ? 180 : 168,
-      minHeight: 40,
-      margin: 5,
-      padding: 8,
-      borderRadius: 15,
-      backgroundColor: '#444341',
+    <View key={id} style={{
+      width: orientation === 'landscape' ? '30%' : '45%',
+      height: orientation === 'landscape' ? '70%' : '40%',
+      marginBottom: 10, marginRight: 10,
+      backgroundColor: '#444341'
     }}>
-      <View>
-        <Pressable onPress={() => setShowDetails(true)}>
-          <Image
-            resizeMode={"contain"}
-            style={{ width: '100%', height: 130 }}
-            source={{ uri: image }} />
-        </Pressable>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={showDetails}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Pressable
-                style={[styles.buttonClose]}
-              >
-                <Image
-                  resizeMode={"contain"}
-                  style={{ width: width / 2, height: width / 3 }}
-                  source={{ uri: image }} />
-
-                <Text style={styles.descriptionText}>Описание:</Text>
-                <Text style={styles.description}>{description}</Text>
-
-                <TouchableOpacity style={styles.close} onPress={() => setShowDetails(false)}>
-                  <Text style={styles.textStyle}>Затвори</Text>
-                </TouchableOpacity>
-              </Pressable>
-            </View>
-          </View>
-        </Modal>
-      </View>
+      <Pressable style={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Image
+          style={{ width: '100%', height: 130 }}
+          source={{ uri: image }} />
+      </Pressable>
 
       <View>
-        <Text style={styles.productName}>{name}</Text>
-        <Text style={styles.productPrice}>Цена: {price} лв.</Text>
+        <Text style={{ color: 'white', textAlign: 'center' }}>{name}</Text>
+        <Text style={{ color: 'orange', textAlign: 'center' }}>Цена: {price} лв.</Text>
       </View>
 
-      <View style={styles.productCount}>
+      <View style={{
+        width: '40%', backgroundColor: 'orange',
+        position: 'relative',
+        left: '30%',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+      }}>
         {flag ? (
-          <TouchableOpacity style={{
-            width: 40,
-            height: 30,
-            margin: 6,
-            backgroundColor: 'red'
-          }} onPress={onRemoveProduct}>
-            <Text style={styles.buttonText}>-</Text>
+          <TouchableOpacity onPress={onRemoveProduct}>
+            <Text style={{ textAlign: 'center', fontSize: 18, }}>-</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={{
-            width: 40,
-            height: 30,
-            margin: 6,
-            backgroundColor: '#C79038'
-          }} onPress={onAddProduct}>
-            <Text style={styles.buttonText}>+</Text>
+          <TouchableOpacity onPress={onAddProduct}>
+            <Text style={{ textAlign: 'center', fontSize: 18, }}>+</Text>
           </TouchableOpacity>
         )}
-
       </View>
     </View>
   );
 }
 const styles = StyleSheet.create({
   container: {
-    width: 168,
-    minHeight: 40,
-    margin: 5,
+    margin: 10,
     padding: 8,
     borderRadius: 15,
     backgroundColor: '#444341',
   },
   productCount: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
+    // display: 'flex',
+    // flexDirection: 'row',
+    // justifyContent: 'center',
     margin: 'auto'
   },
   buttonText: {
     textAlign: 'center',
     color: '#ffff',
-    fontSize: 20,
+    fontSize: 17,
   },
   productName: {
     color: '#ffff',
-    fontSize: 16,
+    fontSize: 14,
+    maxWidth: 120,
     textAlign: 'center'
   },
   productPrice: {

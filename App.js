@@ -4,6 +4,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import CartContext from './src/context/CartContext'
 import AuthContext from './src/context/AuthContext'
+import OrientationContext from './src/context/OrientationContext'
+
 import HomeScreen from './src/screens/HomeScreen'
 import AdminScreen from './src/screens/AdminScreen'
 import BasketScreen from './src/screens/BasketScreen'
@@ -16,20 +18,23 @@ const Stack = createNativeStackNavigator();
 function App() {
   const [products, setProducts] = useState([])
   const [isAuth, loggedIn] = useState(false)
+  const [orientation, setOrientation] = useState('')
 
   return (
     <CartContext.Provider value={{ products, setProducts }}>
       <AuthContext.Provider value={{ isAuth, loggedIn }}>
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Admin" component={AdminScreen} />
-            <Stack.Screen name="Basket" component={BasketScreen} />
-            <Stack.Screen name="Login" component={LoginScreen} />
-            <Stack.Screen name="SignUp" component={SignUp} />
-            <Stack.Screen name="AddProduct" component={AddProductScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
+        <OrientationContext.Provider value={{ orientation, setOrientation }}>
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName="Home">
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen name="Admin" component={AdminScreen} />
+              <Stack.Screen name="Basket" component={BasketScreen} />
+              <Stack.Screen name="Login" component={LoginScreen} />
+              <Stack.Screen name="SignUp" component={SignUp} />
+              <Stack.Screen name="AddProduct" component={AddProductScreen} />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </OrientationContext.Provider>
       </AuthContext.Provider>
     </CartContext.Provider>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   StyleSheet,
   View,
@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   Button,
   Dimensions,
+  ScrollView,
+  Pressable,
+  Image,
+  Modal,
 } from 'react-native'
 
 import Header from '../components/Header/index'
 import Product from '../components/Product/index'
 import { firestore } from '../firebase/config'
 
-import ScreenOrientation from 'expo-screen-orientation';
+import OrientationContext from '../context/OrientationContext'
 
 const HomeScreen = ({ navigation }) => {
   const [products, setProducts] = useState([])
@@ -24,6 +28,8 @@ const HomeScreen = ({ navigation }) => {
   const [currentCount, setCurrentCount] = useState(0)
   const [maxCount, setMaxCount] = useState(10)
   const [productsPerPage, setProductsPerPage] = useState(2)
+
+  const orientationContext = useContext(OrientationContext)
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -43,10 +49,10 @@ const HomeScreen = ({ navigation }) => {
   useEffect(() => {
     if (!isPortrait()) {
       setOrientation('landscape')
-      setProductsPerPage(4)
+      orientationContext.setOrientation('landscape')
     } else {
       setOrientation('portrait')
-      setProductsPerPage(2)
+      orientationContext.setOrientation('portrait')
     }
   }, [currentHeight, currentWidth])
 
@@ -68,45 +74,42 @@ const HomeScreen = ({ navigation }) => {
     )
   }
 
-  const renderItem = ({ item }) => {
-    return (
-      <Product
-        key={item.id}
-        id={item.id}
-        name={item.name}
-        image={item.photoUrl}
-        price={item.price}
-        description={item.description}
-        orientation={orientation}
-      />
-    )
-  }
-
   const currentProducts = products;
 
   return (
     <View style={styles.wrapper}>
       <Header navigation={navigation} />
 
-      <View style={styles.portrait}>
-        {productsPerPage === 2 ? (
-          <FlatList
-            key={'_'}
-            keyExtractor={(item) => '_' + item.id}
-            data={currentProducts}
-            renderItem={renderItem}
-            numColumns={productsPerPage}
-          />
-        ) : (
-          <FlatList
-            key={'#'}
-            keyExtractor={(item) => '#' + item.id}
-            data={currentProducts}
-            renderItem={renderItem}
-            numColumns={productsPerPage}
-          />
-        )}
-      </View>
+      {/* <View style={styles.portrait}>
+        <FlatList
+          key={'_'}
+          keyExtractor={(item) => '_' + item.id}
+          data={currentProducts}
+          renderItem={renderItem}
+        // numColumns={productsPerPage}
+        />
+      </View> */}
+      <ScrollView>
+        <View style={{
+          maxWidth: '100%', maxHeight: '100%', flexDirection: 'row',
+          justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', height: '90%'
+        }}>
+
+          {products && products.map((item) => {
+            return (
+              <Product
+                key={item.id}
+                id={item.id}
+                name={item.name}
+                image={item.photoUrl}
+                description={item.description}
+                orientation={orientation}
+                price={item.price}
+              />
+            )
+          })}
+        </View>
+      </ScrollView>
 
     </View>
   )
@@ -116,16 +119,14 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: 'black',
-    maxWidth: '100%'
   },
   portrait: {
-    minWidth: '100%',
-    height: '99%',
-    margin: 'auto',
     backgroundColor: 'black',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center'
+    flex: 1,
+    maxHeight: '90%',
+    flexDirection: 'row',
+    //justifyContent: 'center',
+    margin: 5,
   },
   button: {
     backgroundColor: 'orange',

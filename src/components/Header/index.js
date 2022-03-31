@@ -32,10 +32,12 @@ const CustomHeader = ({ navigation }) => {
         </TouchableOpacity>
       </View>
       <View style={{ display: 'flex', justifyContent: 'center' }}>
-        <Text style={{ textAlign: 'center', color: '#ffff', fontSize: 20 }}>Inifinity Digital Menu</Text>
+        <Text style={{ textAlign: 'center', color: '#ffff', fontSize: 20 }}>Infinity Digital Menu</Text>
       </View>
       <View>
-        <Icon name='shopping-cart' style={{ fontSize: 32 }} />
+        <TouchableOpacity onPress={() => { navigation.navigate('Basket') }}>
+          <Icon name='shopping-cart' style={{ fontSize: 32 }} />
+        </TouchableOpacity>
         {context.products.length > 0 ? (
           <View style={styles.iconCart}>
             <Text style={styles.countCart}>{context.products.length}</Text>
