@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
 
 import { FlatList } from 'react-native'
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet,
+    ScrollView,
+    SafeAreaView
+} from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CartContext from '../context/CartContext'
@@ -150,7 +153,7 @@ const BasketScreen = ({ navigation }) => {
                 </Text>
             </Icon.Button>
 
-            <ScrollView>
+            <SafeAreaView style={{flex: 1}}>
                 <View style={styles.summary}>
                     {products && (
                         <FlatList
@@ -160,12 +163,12 @@ const BasketScreen = ({ navigation }) => {
                         />
                     )}
                 </View>
-            </ScrollView>
+            </SafeAreaView >
 
             <View style={{ height: 20 }} />
 
             <View>
-                <Text style={{ color: '#ffff' }}>Total Price: {totalPrice.toFixed(2)} лв</Text>
+                <Text style={{ color: '#ffff' }}>Крайна цена: {totalPrice.toFixed(2)} лв</Text>
             </View>
             <TouchableOpacity style={{
                 backgroundColor: "#9fd236",

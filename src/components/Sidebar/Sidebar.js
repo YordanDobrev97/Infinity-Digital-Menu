@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
     },
     closeIcon: {
         color: '#ffff',
-        fontSize: 22
+        fontSize: 26
     },
     navItemContainer: {
-        margin: 4
+        margin: 0
     },
     navItem: {
         color: 'white',
