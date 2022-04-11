@@ -1,14 +1,18 @@
 import React, { useState, useEffect, useContext } from 'react'
 
 import { FlatList } from 'react-native'
-import { View, Text, TouchableOpacity, Image, Dimensions, StyleSheet,
-    ScrollView,
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image, 
+    Dimensions,
+    StyleSheet,
     SafeAreaView
 } from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CartContext from '../context/CartContext'
-import OrientationContext from '../context/OrientationContext'
 
 const { width } = Dimensions.get("window")
 
@@ -16,7 +20,7 @@ const BasketScreen = ({ navigation }) => {
     const context = useContext(CartContext)
     const [products, setProducts] = useState(context.products)
     const [totalPrice, setTotalPrice] = useState(0)
-
+    const [successOrder, setSuccessOrder] = useState(false)
     const [currentHeight, setHeight] = useState(Dimensions.get('screen').height)
     const [currentWidth, setWidth] = useState(Dimensions.get('screen').width)
 
@@ -35,7 +39,9 @@ const BasketScreen = ({ navigation }) => {
     }, [currentHeight, currentWidth])
 
     const onBack = () => {
-        context.setProducts([])
+        if (successOrder) {
+            context.setProducts([])
+        }
         navigation.reset({
             index: 0,
             routes: [{ name: 'Home' }]
@@ -49,7 +55,32 @@ const BasketScreen = ({ navigation }) => {
         setProducts(filteredProducts)
     }
     const onSendToEmail = async () => {
+        const productsRes = products.map((product) => {
+            return `
+            Продукт: ${product.name}
+            Единична цена - ${product.price}лв
+            Количество: ${product.count}
+            `
+        })
 
+        fetch('https://digitalmenu-api.herokuapp.com', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                email: 'Nikoletaairbnb1@gmail.com',
+                subject: 'Нова поръчка',
+                text: `
+                    Поръчани продукти:
+                    ${productsRes.join('\n')}
+                    Крайна цена: ${totalPrice.toFixed(2)} лв.
+                `
+            })
+        }).then((res) => {
+            console.log(JSON.stringify(res))
+            if (res) {
+                setSuccessOrder(true)
+            }
+        })
     }
 
     Dimensions.addEventListener('change', () => {
@@ -66,8 +97,11 @@ const BasketScreen = ({ navigation }) => {
         const shadowProducts = [...products]
         const product = shadowProducts.find((p) => p.id === id)
         product.count++;
-        await updateTotalPrice(shadowProducts)
-        setProducts(shadowProducts)
+        updateTotalPrice(shadowProducts)
+        .then((res) => {
+            setProducts(shadowProducts)
+        })
+        
     }
 
     const onDecreaseQuantity = async (id) => {
@@ -75,8 +109,10 @@ const BasketScreen = ({ navigation }) => {
         const product = shadowProducts.find((p) => p.id === id)
         if (product.count > 1) {
             product.count--;
-            await updateTotalPrice(shadowProducts)
-            setProducts(shadowProducts)
+            updateTotalPrice(shadowProducts)
+            .then(() => {
+                setProducts(shadowProducts)
+            })
         }
     }
 
@@ -145,9 +181,35 @@ const BasketScreen = ({ navigation }) => {
         )
     }
 
+    if (successOrder) {
+        return (
+            <View style={{backgroundColor: '#23212E',
+            height: '100%',
+            justifyContent: 'center',
+            alignItems: 'center'}}>
+                <Text style={{color: 'white', textAlign: 'center'}}>Вашата поръчка беше изпратена успешно!</Text>
+                <TouchableOpacity
+                    onPress={onBack}
+                    style={{
+                    backgroundColor: 'orange',
+                    color: 'white',
+                    width: '40%',
+                    padding: 10,
+                    margin: 8,
+                    }}>
+                    <Text>Към начална страница</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    }
+
     return (
         <View style={styles.screen}>
-            <Icon.Button style={{ marginTop: 30 }} onPress={onBack} name="arrow-left" backgroundColor="#3b5998">
+            <Icon.Button
+                style={{ marginTop: 30 }}
+                onPress={onBack}
+                name="arrow-left"
+                backgroundColor="#3b5998">
                 <Text style={{ fontSize: 15, color: '#ffff', textAlign: 'center' }}>
                     Назад
                 </Text>

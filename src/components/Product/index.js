@@ -88,10 +88,9 @@ const Product = ({ id, name, price, image, description }) => {
         alignItems: "baseline",
         flexDirection: "row"
       }}>
-        <ResponsiveImage
-          source={{ uri: image }}
-          initWidth="160"
-          initHeight="130"
+        <Image 
+          style={{width: '100%', height: '80%'}}
+          source={{uri: image}}
         />
       </View>
 
