@@ -11,6 +11,7 @@ import AdminScreen from './src/screens/AdminScreen'
 import BasketScreen from './src/screens/BasketScreen'
 import LoginScreen from './src/screens/Login'
 import AddProductScreen from './src/screens/AddProductScreen'
+import EditProductScreen from './src/screens/EditProductScreen'
 import SignUp from './src/screens/SignUp'
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,8 @@ function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="SignUp" component={SignUp} />
               <Stack.Screen name="AddProduct" component={AddProductScreen} />
+              <Stack.Screen name="EditProduct" component={EditProductScreen} />
+              <Stack.Screen name="DeleteProduct" component={AddProductScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </OrientationContext.Provider>

@@ -13,7 +13,6 @@ const CustomHeader = ({ navigation }) => {
 
   useEffect(() => {
     setCountProducts(context.products.length)
-    console.log('Change count: ' + context.products.length)
   }, [context.products.length])
 
   const showMenuHandler = () => {

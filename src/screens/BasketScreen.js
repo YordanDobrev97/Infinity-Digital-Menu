@@ -5,12 +5,12 @@ import {
     View,
     Text,
     TouchableOpacity,
-    Image, 
+    Image,
     Dimensions,
     StyleSheet,
     SafeAreaView
 } from 'react-native'
-
+import { FlatGrid } from 'react-native-super-grid'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import CartContext from '../context/CartContext'
 
@@ -38,7 +38,7 @@ const BasketScreen = ({ navigation }) => {
         }
     }, [currentHeight, currentWidth])
 
-    const onBack = () => {
+    const onBack = async () => {
         if (successOrder) {
             context.setProducts([])
         }
@@ -52,7 +52,11 @@ const BasketScreen = ({ navigation }) => {
         const currentProducts = [...products]
         const filteredProducts = currentProducts.filter((p) => p.id !== id);
         await updateTotalPrice(filteredProducts)
-        setProducts(filteredProducts)
+            .then(() => {
+                setProducts(filteredProducts)
+                context.setProducts(filteredProducts)
+            })
+
     }
     const onSendToEmail = async () => {
         const productsRes = products.map((product) => {
@@ -76,7 +80,6 @@ const BasketScreen = ({ navigation }) => {
                 `
             })
         }).then((res) => {
-            console.log(JSON.stringify(res))
             if (res) {
                 setSuccessOrder(true)
             }
@@ -98,10 +101,10 @@ const BasketScreen = ({ navigation }) => {
         const product = shadowProducts.find((p) => p.id === id)
         product.count++;
         updateTotalPrice(shadowProducts)
-        .then((res) => {
-            setProducts(shadowProducts)
-        })
-        
+            .then((res) => {
+                setProducts(shadowProducts)
+            })
+
     }
 
     const onDecreaseQuantity = async (id) => {
@@ -110,9 +113,9 @@ const BasketScreen = ({ navigation }) => {
         if (product.count > 1) {
             product.count--;
             updateTotalPrice(shadowProducts)
-            .then(() => {
-                setProducts(shadowProducts)
-            })
+                .then(() => {
+                    setProducts(shadowProducts)
+                })
         }
     }
 
@@ -126,23 +129,30 @@ const BasketScreen = ({ navigation }) => {
 
     const renderItem = ({ item }) => {
         return (
-            <View style={{ flex: 1, width: '100%', height: isPortrait() ? '20%' : '10%' }}>
-                <View style={{ width: '100%', margin: 10, backgroundColor: '#0b466e', flexDirection: 'row', borderBottomWidth: 2, borderColor: "#cccccc", paddingBottom: 10 }}>
+            <View style={{
+                flex: 1,
+                width: '100%',
+                height: '10%'
+            }}>
+                <View style={{ width: '100%', backgroundColor: '#85661e', flexDirection: 'row', borderBottomWidth: 2, borderColor: "#cccccc", paddingBottom: 10 }}>
                     <Image
                         resizeMode={"contain"}
                         style={{
-                            width: currentWidth,
-                            height: currentHeight
+                            width: '40%',
+                            height: '40%',
+                            padding: 20,
+                            justifyContent: 'center',
+                            alignSelf: 'center'
                         }}
                         source={{ uri: item.image }} />
                     <View
                         style={{ flex: 1, backgroundColor: 'transparent', padding: 10, justifyContent: "space-between" }}>
                         <View>
-                            <Text style={{ fontWeight: "bold", color: 'white', fontSize: 20 }}>{item.name}</Text>
+                            <Text style={{ fontWeight: "bold", color: 'white', fontSize: 17 }}>{item.name}</Text>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <Text style={{ fontWeight: 'bold', color: "#9fd236", fontSize: 20 }}>
-                                {item.count}бр x {item.price}лв
+                            <Text style={{ fontWeight: 'bold', color: "#9fd236", fontSize: 17 }}>
+                                {item.count}бр x {Number(item.price).toFixed(2)}лв
                             </Text>
                         </View>
                         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -183,21 +193,23 @@ const BasketScreen = ({ navigation }) => {
 
     if (successOrder) {
         return (
-            <View style={{backgroundColor: '#23212E',
-            height: '100%',
-            justifyContent: 'center',
-            alignItems: 'center'}}>
-                <Text style={{color: 'white', textAlign: 'center'}}>Вашата поръчка беше изпратена успешно!</Text>
+            <View style={{
+                backgroundColor: '#23212E',
+                height: '100%',
+                justifyContent: 'center',
+                alignItems: 'center'
+            }}>
+                <Text style={{ color: 'white', textAlign: 'center' }}>Вашата поръчка беше изпратена успешно!</Text>
                 <TouchableOpacity
                     onPress={onBack}
                     style={{
-                    backgroundColor: 'orange',
-                    color: 'white',
-                    width: '40%',
-                    padding: 10,
-                    margin: 8,
+                        backgroundColor: 'orange',
+                        width: '40%',
+                        padding: 10,
+                        margin: 8,
+                        borderRadius: 24,
                     }}>
-                    <Text>Към начална страница</Text>
+                    <Text style={{ textAlign: 'center', color: 'black' }}>Към начална страница</Text>
                 </TouchableOpacity>
             </View>
         )
@@ -206,34 +218,31 @@ const BasketScreen = ({ navigation }) => {
     return (
         <View style={styles.screen}>
             <Icon.Button
-                style={{ marginTop: 30 }}
+                style={{ marginTop: 18 }}
                 onPress={onBack}
                 name="arrow-left"
-                backgroundColor="#3b5998">
+                backgroundColor="#AC7F24">
                 <Text style={{ fontSize: 15, color: '#ffff', textAlign: 'center' }}>
                     Назад
                 </Text>
             </Icon.Button>
 
-            <SafeAreaView style={{flex: 1}}>
-                <View style={styles.summary}>
-                    {products && (
-                        <FlatList
-                            keyExtractor={(item) => item.id}
-                            data={products}
-                            renderItem={renderItem}
-                        />
-                    )}
-                </View>
-            </SafeAreaView >
-
-            <View style={{ height: 20 }} />
+            <View style={styles.summary}>
+                {products && (
+                    <FlatGrid
+                        itemDimension={200}
+                        keyExtractor={(item) => item.id}
+                        data={products}
+                        renderItem={renderItem}
+                    />
+                )}
+            </View>
 
             <View>
                 <Text style={{ color: '#ffff' }}>Крайна цена: {totalPrice.toFixed(2)} лв</Text>
             </View>
             <TouchableOpacity style={{
-                backgroundColor: "#9fd236",
+                backgroundColor: "#AC7F24",
                 width: '100%',
                 alignItems: 'center',
                 padding: 10,
@@ -256,11 +265,9 @@ const BasketScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     screen: {
         //margin: 20,
-        backgroundColor: '#23212E',
+        backgroundColor: '#444341',
         color: '#C6C5CB',
         height: '100%',
-        justifyContent: 'center',
-        flexDirection: 'column'
     },
     summary: {
         flexDirection: 'row',
@@ -268,6 +275,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         marginBottom: 20,
         padding: 10,
+        minHeight: '60%',
+        flex: 1
     },
     summaryText: {
         fontFamily: 'open-sans-bold',

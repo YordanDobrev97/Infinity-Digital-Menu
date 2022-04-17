@@ -1,24 +1,37 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
   Button,
+  Image,
   TextInput,
   TouchableOpacity,
   Dimensions,
   StyleSheet,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { firestore, storage } from '../firebase/config'
 
-const AddProductScreen = ({ navigation }) => {
+const EditProductScreen = ({ route, navigation }) => {
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0.0)
-  const [photo, setPhoto] = useState('')
+  const [photo, setPhoto] = useState(null)
   const [description, setDescription] = useState('')
-
   const [uploading, setUploading] = useState(false)
+  const { id } = route.params
+
+  useEffect(() => {   
+    firestore.collection('products').doc(id).get()
+      .then(res => {
+        const { name, description, photoUrl, price } = res.data()
+        setName(name)
+        setDescription(description)
+        setPhoto(photoUrl)
+        setPrice(Number(price))
+      })
+  }, [])
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -29,7 +42,6 @@ const AddProductScreen = ({ navigation }) => {
     });
 
     if (!result.cancelled) {
-      console.log('Image Uri = ', result.uri)
       setPhoto(result.uri)
     }
   };
@@ -63,7 +75,7 @@ const AddProductScreen = ({ navigation }) => {
       },
       () => {
         task.snapshot.ref.getDownloadURL().then((downloadURL) => {
-          add(downloadURL)
+          update(downloadURL)
           return downloadURL
         });
       })
@@ -75,85 +87,88 @@ const AddProductScreen = ({ navigation }) => {
     setUploading(true)
   }
 
-  const add = (photoUrl) => {
+  const update = (photoUrl) => {
     firestore.collection('products')
-      .add({
+      .doc(id).update({
         name,
-        price,
         photoUrl,
-        description
-      }).then(() => {
-        try {
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'Home' }]
-          })
-        } catch (error) {
-          console.log(error)
-        }
+        description,
+        price
+      }).then((res) => {
+        console.log(res)
+        navigation.reset({
+          index: 0,
+          routes: [{name: 'Admin'}]
+        })
       })
   }
 
   const onBackAdmin = () => {
     navigation.reset({
       index: 0,
-      routes: [{name: 'Admin'}]
+      routes: [{ name: 'Admin' }]
     })
   }
 
   if (uploading) {
     return (
-      <View style={{marginTop: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: '#444341', width: '100%', height: '100%'}}>
-      <Text style={{color: 'white', textAlign: 'center'}}>Добавяне...</Text>
-      <ActivityIndicator color={'white'}/>
-    </View>
+      <View style={{ marginTop: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: '#444341', width: '100%', height: '100%' }}>
+        <Text style={{ color: 'white', textAlign: 'center' }}>Ъпдейтване...</Text>
+        <ActivityIndicator color={'white'} />
+      </View>
     )
   }
 
   return (
     <View style={styles.boxContainer}>
-      <Button onPress={onBackAdmin} title='Назад' style={{marginTop: 30}}/>
-      <View style={styles.boxContainer}>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.input}
-            placeholder='Име на продукта'
-            placeholderTextColor={'white'}
-            onChangeText={value => setName(value)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.input}
-            keyboardType='numeric'
-            placeholder='Цена на продукта'
-            placeholderTextColor={'white'}
-            onChangeText={value => setPrice(value)}
-          />
-        </View>
-        <View style={styles.inputView}>
-          <TextInput
-            style={styles.input}
-            placeholder='Описание на продукта'
-            placeholderTextColor={'white'}
-            onChangeText={value => setDescription(value)}
-          />
-        </View>
+        <Button onPress={onBackAdmin} title='Назад' style={{ marginTop: 30 }} />
+        <View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.input}
+              placeholder='Име на продукта'
+              value={name}
+              placeholderTextColor={'white'}
+              onChangeText={value => setName(value)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.input}
+              keyboardType='numeric'
+              placeholderTextColor={'white'}
+              value={`${price}`}
+              onChangeText={value => setPrice(value)}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.input}
+              placeholder='Описание на продукта'
+              placeholderTextColor={'white'}
+              value={description}
+              onChangeText={value => setDescription(value)}
+            />
+          </View>
 
-        <View>
-          <TouchableOpacity
-            style={styles.uploadButton}
-            onPress={pickImage}>
-            <Text style={styles.uploadButtonText}>Избери снимка</Text>
-          </TouchableOpacity>
+          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+            <Image
+              style={{ width: '30%', height: '30%' }}
+              source={{ uri: photo }}
+            />
+            <TouchableOpacity
+              style={styles.uploadButton}
+              onPress={pickImage}>
+              <Text style={styles.uploadButtonText}>Избери снимка</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Button
+              style={styles.button} title='Запиши'
+              onPress={onAddProduct}
+            />
+          </View>
         </View>
-        <View>
-          <Button
-            style={styles.button} title='Добави'
-            onPress={onAddProduct}
-          />
-        </View>
-      </View>
     </View>
   )
 }
@@ -163,8 +178,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#444341',
     width: '100%',
     height: '100%',
-    flex: 1,
-    marginTop: 28,
+    
+    marginTop: 20
   },
   button: {
     backgroundColor: '#33B5FF',
@@ -174,7 +189,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#393B38",
     borderRadius: 30,
     width: "80%",
-    height: 50,
+    height: 60,
+    marginTop: 5,
     marginLeft: 40,
     marginBottom: 5,
     alignItems: "center",
@@ -223,4 +239,4 @@ const styles = StyleSheet.create({
   },
 })
 
-export default AddProductScreen
+export default EditProductScreen
