@@ -61,13 +61,6 @@ const Sidebar = ({ setShowMenu, showMenu, navigation }) => {
                                 }}>
                                     <Text style={styles.navItemText}>Вход</Text>
                                 </TouchableOpacity>
-
-                                <TouchableOpacity onPress={() => {
-                                    setShowMenu(false)
-                                    navigation.navigate('SignUp')
-                                }}>
-                                    <Text style={styles.navItemText}>Регистрация</Text>
-                                </TouchableOpacity>
                             </View>
                         ) : (
                             <View>

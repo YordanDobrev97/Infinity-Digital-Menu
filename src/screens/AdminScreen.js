@@ -9,10 +9,7 @@ import {
 } from 'react-native'
 
 import Icon from 'react-native-vector-icons/FontAwesome'
-
 import { FlatGrid } from 'react-native-super-grid'
-import Product from '../components/Product/index'
-
 import { firestore } from '../firebase/config'
 
 const AdminScreen = ({ navigation }) => {
@@ -62,10 +59,13 @@ const AdminScreen = ({ navigation }) => {
     })
   }
 
+  const onAddCategory = () => {
+    navigation.navigate('Category')
+  }
+
   const onDeleteProduct = async (id) => {
     firestore.collection('products').doc(id).delete()
     .then((res) => {
-      console.log(res)
       const filtered = items.filter(x => x.id !== id)
       setItems(filtered)
     })
@@ -80,9 +80,13 @@ const AdminScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      <View>
+      <View style={styles.topHeader}>
         <TouchableOpacity style={styles.addProduct} onPress={onAddProductScreen}>
           <Text style={{ textAlign: 'center' }}>+</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity style={styles.category} onPress={onAddCategory}>
+          <Text style={styles.categoryText}>Създай категория</Text>
         </TouchableOpacity>
       </View>
 
@@ -93,7 +97,7 @@ const AdminScreen = ({ navigation }) => {
 
           renderItem={({ item, index }) => (
             <View key={item.id} style={[styles.itemContainer,
-            { backgroundColor: '#AC7F24', height: 260 }]}>
+            { backgroundColor: '#303650', height: 260 }]}>
               <View style={{
                 flexGrow: 1,
                 justifyContent: "center",
@@ -214,6 +218,18 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 18
   },
+  topHeader: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%'
+  },
+  category: {
+    width: '60%'
+  },
+  categoryText: {
+    textAlign: 'center',
+    color: '#ffff'
+  }
 })
 
 export default AdminScreen

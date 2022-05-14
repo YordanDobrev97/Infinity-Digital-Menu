@@ -36,8 +36,8 @@ const HomeScreen = (props) => {
 
   if (loading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator color={"black"} />
+      <View style={{ backgroundColor: 'black', flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator color={"white"} />
       </View>
     )
   }

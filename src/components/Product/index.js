@@ -16,6 +16,7 @@ const Product = ({ id, name, price, image, description }) => {
   const [showDetails, setShowDetails] = useState(false)
 
   const context = useContext(CartContext)
+  console.log(context.products)
 
   const onAddProduct = () => {
     context.setProducts((oldValue) => {
@@ -34,7 +35,7 @@ const Product = ({ id, name, price, image, description }) => {
 
   return (
     <View key={id} style={[styles.itemContainer,
-    { backgroundColor: '#444341', height: 260 }]}>
+    { height: 260 }]}>
       <View style={{
         flexGrow: 1,
         justifyContent: "center",
@@ -76,7 +77,7 @@ const Product = ({ id, name, price, image, description }) => {
       <Text style={styles.productName}>{name}</Text>
       <Text style={styles.productPrice}>{Number(price).toFixed(2)} лв</Text>
 
-      {flag ? (
+      {context.products.filter(x => x.id === id).length > 0 || flag ? (
         <TouchableOpacity style={styles.buttonToCart} onPress={onRemoveProduct}>
           <Text style={{ textAlign: 'center', fontSize: 18, }}>-</Text>
         </TouchableOpacity>
@@ -90,9 +91,10 @@ const Product = ({ id, name, price, image, description }) => {
 }
 const styles = StyleSheet.create({
   itemContainer: {
+    backgroundColor: '#303650',
     justifyContent: 'flex-end',
     borderRadius: 5,
-    padding: 22,
+    padding: 20,
     margin: 0,
     width: '100%',
     height: 220,

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react'
 
-import { FlatList } from 'react-native'
 import {
     View,
     Text,
@@ -12,6 +11,7 @@ import {
 } from 'react-native'
 import { FlatGrid } from 'react-native-super-grid'
 import Icon from 'react-native-vector-icons/FontAwesome'
+
 import CartContext from '../context/CartContext'
 
 const { width } = Dimensions.get("window")
@@ -104,7 +104,6 @@ const BasketScreen = ({ navigation }) => {
             .then((res) => {
                 setProducts(shadowProducts)
             })
-
     }
 
     const onDecreaseQuantity = async (id) => {
@@ -132,9 +131,14 @@ const BasketScreen = ({ navigation }) => {
             <View style={{
                 flex: 1,
                 width: '100%',
-                height: '10%'
+                height: '50%'
             }}>
-                <View style={{ width: '100%', backgroundColor: '#85661e', flexDirection: 'row', borderBottomWidth: 2, borderColor: "#cccccc", paddingBottom: 10 }}>
+                <View style={{ width: '100%',
+                height: '100%',
+                backgroundColor: 'black', flexDirection:
+                'row', borderBottomWidth: 2,
+                borderColor: "#cccccc",
+                }}>
                     <Image
                         resizeMode={"contain"}
                         style={{
@@ -221,7 +225,7 @@ const BasketScreen = ({ navigation }) => {
                 style={{ marginTop: 18 }}
                 onPress={onBack}
                 name="arrow-left"
-                backgroundColor="#AC7F24">
+                backgroundColor="black">
                 <Text style={{ fontSize: 15, color: '#ffff', textAlign: 'center' }}>
                     Назад
                 </Text>
@@ -229,23 +233,25 @@ const BasketScreen = ({ navigation }) => {
 
             <View style={styles.summary}>
                 {products && (
-                    <FlatGrid
+                    <SafeAreaView style={{flex: 1}}>
+                        <FlatGrid
                         itemDimension={200}
                         keyExtractor={(item) => item.id}
                         data={products}
                         renderItem={renderItem}
                     />
+                    </SafeAreaView>
                 )}
             </View>
 
             <View>
-                <Text style={{ color: '#ffff' }}>Крайна цена: {totalPrice.toFixed(2)} лв</Text>
+                <Text style={{ color: '#ffff', fontSize: 20, textAlign: 'center' }}>Крайна цена: {totalPrice.toFixed(2)} лв</Text>
             </View>
             <TouchableOpacity style={{
-                backgroundColor: "#AC7F24",
+                backgroundColor: "#303650",
                 width: '100%',
                 alignItems: 'center',
-                padding: 10,
+                padding: 8,
                 borderRadius: 5
             }}
                 onPress={onSendToEmail}>
@@ -265,17 +271,17 @@ const BasketScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     screen: {
         //margin: 20,
-        backgroundColor: '#444341',
+        backgroundColor: 'black',
         color: '#C6C5CB',
         height: '100%',
     },
     summary: {
         flexDirection: 'row',
-        alignItems: 'center',
+        //alignItems: 'top',
+        flexWrap: 'wrap',
         justifyContent: 'space-between',
-        marginBottom: 20,
-        padding: 10,
-        minHeight: '60%',
+        naxHeight: '60%',
+        //height: '60%',
         flex: 1
     },
     summaryText: {
@@ -286,31 +292,5 @@ const styles = StyleSheet.create({
         color: 'blue'
     }
 });
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//         paddingTop: 30,
-//         backgroundColor: '#0d0f10',
-//         flex: 1,
-//         alignItems: 'center',
-//         justifyContent: 'center'
-//     },
-//     item: {
-//         borderBottomWidth: 1,
-//         borderBottomColor: "lightgrey",
-//     },
-//     footer: {
-//         flexDirection: "row",
-//         justifyContent: "space-between",
-//         marginVertical: 0.5,
-//         paddingVertical: 28,
-//         paddingHorizontal: 16,
-//     },
-//     checkoutButton: {
-//         marginHorizontal: 16,
-//         marginVertical: 24,
-//     },
-// })
 
 export default BasketScreen

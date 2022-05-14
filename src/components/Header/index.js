@@ -27,7 +27,7 @@ const CustomHeader = ({ navigation }) => {
     <View style={styles.header}>
       <View>
         <TouchableOpacity onPress={showMenuHandler}>
-          <Icon name='bars' style={{ fontSize: 32 }} />
+          <Icon name='bars' style={{ fontSize: 32, color: 'white' }} />
         </TouchableOpacity>
       </View>
       <View style={{ display: 'flex', justifyContent: 'center' }}>
@@ -35,7 +35,7 @@ const CustomHeader = ({ navigation }) => {
       </View>
       <View>
         <TouchableOpacity onPress={() => { navigation.navigate('Basket') }}>
-          <Icon name='shopping-cart' style={{ fontSize: 32 }} />
+          <Icon name='shopping-cart' style={{ fontSize: 32, color: 'white' }} />
         </TouchableOpacity>
         {context.products.length > 0 ? (
           <View style={styles.iconCart}>
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    backgroundColor: '#AC7F24',
+    backgroundColor: 'black',
     padding: 12,
     marginTop: 25,
     fontSize: 32
