@@ -22,7 +22,7 @@ const EditProductScreen = ({ route, navigation }) => {
   const [uploading, setUploading] = useState(false)
   const { id } = route.params
 
-  useEffect(() => {   
+  useEffect(() => {
     firestore.collection('products').doc(id).get()
       .then(res => {
         const { name, description, photoUrl, price } = res.data()
