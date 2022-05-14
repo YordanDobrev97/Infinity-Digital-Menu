@@ -224,7 +224,8 @@ const styles = StyleSheet.create({
     width: '100%'
   },
   category: {
-    width: '60%'
+    width: '60%',
+    margin: 18
   },
   categoryText: {
     textAlign: 'center',
