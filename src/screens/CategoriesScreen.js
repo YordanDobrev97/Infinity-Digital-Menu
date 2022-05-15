@@ -12,7 +12,7 @@ const CategoriesScreen = ({ navigation }) => {
     const fetchCategories = async () => {
       const dbCategories = await (await firestore.collection('categories').get())
       .docs.map((category => {
-        return { ...category.data() }
+        return { id: category.id, ...category.data() }
       }))
       return dbCategories
     }
@@ -33,20 +33,56 @@ const CategoriesScreen = ({ navigation }) => {
     )
   }
 
+  const fetchProducts = async () => {
+    const dbProducts = await (await firestore.collection('products').get()).docs.map((product => {
+      return { id: product.id, ...product.data() }
+    }))
+    return dbProducts
+  }
+
   const onNavigateAdmin = () => {
     navigation.navigate('Admin')
   }
 
+  const onEditCategory = (id) => {
+    console.log(id)
+  }
+
+  const onDeleteCategory = (id, name) => {
+    firestore.collection('categories').doc(id).delete()
+    .then(async (res) => {
+      await removeCategoryFromProducts(name)
+      const filtered = categories.filter(x => x.id !== id)
+      setCategories(filtered)
+    })
+  }
+
+  const removeCategoryFromProducts = async (categoryName) => {
+    const products = await fetchProducts()
+    const filtered = products.filter(p => p.category === categoryName)
+    
+    filtered.forEach(product => {
+      const {id, name, photoUrl, description, price} = product
+      firestore.collection('products').doc(id).update({
+        name,
+        photoUrl,
+        description,
+        price,
+        category: null
+      })
+    })
+  }
+
   const RowCategory = ({ item }) => {
     return (
-      <View key={item.index} style={{margin: 2, padding: 8, minWidth: '100%',
+      <View key={item.id} style={{margin: 2, padding: 8, minWidth: '100%',
       backgroundColor: "#444340", flexDirection: 'row', flexWrap: 'wrap',
       alignItems: 'center', justifyContent: 'space-around'}}>
         <Text style={{ color: '#ffff', margin: 4 }}>{item.name}</Text>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onEditCategory(item.id)}>
             <Icon name='edit' style={{fontSize: 20, margin: 4, color: '#ffff'}}/>
           </TouchableOpacity>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => onDeleteCategory(item.id, item.name)}>
             <Icon name='trash' style={{fontSize: 20,margin: 4, color: '#ffff'}}/>
           </TouchableOpacity>
       </View>
@@ -65,7 +101,7 @@ const CategoriesScreen = ({ navigation }) => {
 
       <View style={styles.tableCategory}>
         <FlatGrid
-        itemDimension={180}
+          itemDimension={180}
           data={categories}
           renderItem={RowCategory}
         />
