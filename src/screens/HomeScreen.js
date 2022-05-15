@@ -18,26 +18,7 @@ import { firestore } from '../firebase/config'
 const HomeScreen = (props) => {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
-  const [categories, setCategories] = useState([
-    {
-      name: 'Напитки'
-    },
-    {
-      name: 'Салати'
-    },
-    {
-      name: 'Сандвичи'
-    },
-    {
-      name: 'Безакохолни'
-    },
-    {
-      name: 'Вино'
-    },
-    {
-      name: 'Вода'
-    }
-  ])
+  const [categories, setCategories] = useState([])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -47,9 +28,20 @@ const HomeScreen = (props) => {
       return dbProducts
     }
 
+    const fetchCategories = async () => {
+      const dbCategories = await (await firestore.collection('categories').get())
+      .docs.map((category => {
+        
+        return { ...category.data() }
+      }))
+      return dbCategories
+    }
+
     fetchProducts()
-      .then((res) => {
+      .then(async (res) => {
+        const resCategories = await fetchCategories()
         setItems(res)
+        setCategories(resCategories)
         setLoading(false)
       })
   }, [])

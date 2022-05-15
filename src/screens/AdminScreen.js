@@ -111,7 +111,8 @@ const AdminScreen = ({ navigation }) => {
               </View>
 
               <Text style={styles.productName}>{item.name}</Text>
-              <Text style={styles.productPrice}>{item.price}</Text>
+              <Text style={styles.productPrice}>Цена: {item.price}</Text>
+              <Text style={styles.productPrice}>Категория: {item.category ?? 'Липсва'}</Text>
 
               <View style={{ justifyContent: 'space-around', flexDirection: 'row' }}>
                 <TouchableOpacity style={styles.buttonToCart} onPress={() => onEditScreen(item.id)}>

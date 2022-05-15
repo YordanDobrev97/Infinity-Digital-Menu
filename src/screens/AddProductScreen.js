@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
   View,
   Text,
@@ -11,14 +11,35 @@ import {
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { firestore, storage } from '../firebase/config'
+import SelectDropdown from 'react-native-select-dropdown'
 
 const AddProductScreen = ({ navigation }) => {
   const [name, setName] = useState('')
   const [price, setPrice] = useState(0.0)
   const [photo, setPhoto] = useState('')
   const [description, setDescription] = useState('')
-
+  const [category, setCategory] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const dbCategories = await (await firestore.collection('categories').get())
+      .docs.map((category => {
+        
+        return { ...category.data() }
+      }))
+      return dbCategories
+    }
+
+    fetchCategories()
+      .then(res => {
+        console.log(res)
+        setCategories(res)
+        setLoading(false)
+      })
+  }, [])
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -81,7 +102,8 @@ const AddProductScreen = ({ navigation }) => {
         name,
         price,
         photoUrl,
-        description
+        description,
+        category
       }).then(() => {
         try {
           navigation.reset({
@@ -110,6 +132,13 @@ const AddProductScreen = ({ navigation }) => {
     )
   }
 
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <ActivityIndicator color={"black"} />
+      </View>
+    )
+  }
   return (
     <View style={styles.boxContainer}>
       <Button onPress={onBackAdmin} title='Назад' style={{marginTop: 30}}/>
@@ -139,6 +168,22 @@ const AddProductScreen = ({ navigation }) => {
             onChangeText={value => setDescription(value)}
           />
         </View>
+
+        <View style={styles.inputView}>
+          <SelectDropdown
+            data={categories}
+            defaultButtonText='Категория'
+            onSelect={(selectedItem, index) => {
+              setCategory(selectedItem.name)
+            }}
+            buttonTextAfterSelection={(selectedItem, index) => {
+              return selectedItem.name
+            }}
+            rowTextForSelection={(item, index) => {
+              return item.name
+            }}
+          />
+          </View>
 
         <View>
           <TouchableOpacity

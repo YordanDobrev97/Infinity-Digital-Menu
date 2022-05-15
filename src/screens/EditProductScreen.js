@@ -9,10 +9,10 @@ import {
   Dimensions,
   StyleSheet,
   ActivityIndicator,
-  ScrollView
 } from 'react-native'
 import * as ImagePicker from 'expo-image-picker'
 import { firestore, storage } from '../firebase/config'
+import SelectDropdown from 'react-native-select-dropdown'
 
 const EditProductScreen = ({ route, navigation }) => {
   const [name, setName] = useState('')
@@ -20,16 +20,32 @@ const EditProductScreen = ({ route, navigation }) => {
   const [photo, setPhoto] = useState(null)
   const [description, setDescription] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [category, setCategory] = useState(false)
+  const [categories, setCategories] = useState([])
   const { id } = route.params
 
   useEffect(() => {
-    firestore.collection('products').doc(id).get()
-      .then(res => {
+    const fetchProduct = async () => {
+      return await firestore.collection('products').doc(id).get()
+    }
+
+    const fetchCategories = async () => {
+      const dbCategories = await (await firestore.collection('categories').get())
+        .docs.map((category => {
+          return { ...category.data() }
+        }))
+      return dbCategories
+    }
+
+    fetchProduct()
+      .then(async (res) => {
+        const resCategories = await fetchCategories()
         const { name, description, photoUrl, price } = res.data()
         setName(name)
         setDescription(description)
         setPhoto(photoUrl)
         setPrice(Number(price))
+        setCategories(resCategories)
       })
   }, [])
 
@@ -93,12 +109,12 @@ const EditProductScreen = ({ route, navigation }) => {
         name,
         photoUrl,
         description,
-        price
+        price,
+        category
       }).then((res) => {
-        console.log(res)
         navigation.reset({
           index: 0,
-          routes: [{name: 'Admin'}]
+          routes: [{ name: 'Admin' }]
         })
       })
   }
@@ -118,11 +134,12 @@ const EditProductScreen = ({ route, navigation }) => {
       </View>
     )
   }
-
+  
   return (
     <View style={styles.boxContainer}>
-        <Button onPress={onBackAdmin} title='Назад' style={{ marginTop: 30 }} />
-        <View>
+      <Button onPress={onBackAdmin} title='Назад' style={{ marginTop: 30 }} />
+      <>
+        <View style={{ flex: 1 }}>
           <View style={styles.inputView}>
             <TextInput
               style={styles.input}
@@ -132,6 +149,7 @@ const EditProductScreen = ({ route, navigation }) => {
               onChangeText={value => setName(value)}
             />
           </View>
+
           <View style={styles.inputView}>
             <TextInput
               style={styles.input}
@@ -141,6 +159,7 @@ const EditProductScreen = ({ route, navigation }) => {
               onChangeText={value => setPrice(value)}
             />
           </View>
+
           <View style={styles.inputView}>
             <TextInput
               style={styles.input}
@@ -148,6 +167,22 @@ const EditProductScreen = ({ route, navigation }) => {
               placeholderTextColor={'white'}
               value={description}
               onChangeText={value => setDescription(value)}
+            />
+          </View>
+
+          <View style={styles.inputView}>
+            <SelectDropdown
+              data={categories}
+              defaultButtonText='Категория'
+              onSelect={(selectedItem, index) => {
+                setCategory(selectedItem.name)
+              }}
+              buttonTextAfterSelection={(selectedItem, index) => {
+                return selectedItem.name
+              }}
+              rowTextForSelection={(item, index) => {
+                return item.name
+              }}
             />
           </View>
 
@@ -169,6 +204,7 @@ const EditProductScreen = ({ route, navigation }) => {
             />
           </View>
         </View>
+      </>
     </View>
   )
 }
@@ -178,7 +214,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#444341',
     width: '100%',
     height: '100%',
-    
     marginTop: 20
   },
   button: {
@@ -189,16 +224,16 @@ const styles = StyleSheet.create({
     backgroundColor: "#393B38",
     borderRadius: 30,
     width: "80%",
-    height: 60,
+    height: 50,
     marginTop: 5,
     marginLeft: 40,
     marginBottom: 5,
     alignItems: "center",
   },
   input: {
-    height: 50,
+    height: 30,
     flex: 1,
-    padding: 10,
+    padding: 5,
     margin: 5,
     color: 'white'
   },
