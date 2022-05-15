@@ -45,7 +45,9 @@ const CategoriesScreen = ({ navigation }) => {
   }
 
   const onEditCategory = (id) => {
-    console.log(id)
+    navigation.navigate('EditCategory', {
+      id: id
+    })
   }
 
   const onDeleteCategory = (id, name) => {
