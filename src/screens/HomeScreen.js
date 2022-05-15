@@ -6,9 +6,8 @@ import {
   FlatList,
   TouchableOpacity,
   ActivityIndicator,
-  SectionList
-} from 'react-native';
-import { FlatGrid } from 'react-native-super-grid';
+} from 'react-native'
+import { FlatGrid } from 'react-native-super-grid'
 
 import Header from '../components/Header/index'
 import Product from '../components/Product/index'
@@ -19,6 +18,7 @@ const HomeScreen = (props) => {
   const [loading, setLoading] = useState(true)
   const [items, setItems] = useState([])
   const [categories, setCategories] = useState([])
+  const [filteredItems, setFilteredItems] = useState([])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -41,6 +41,7 @@ const HomeScreen = (props) => {
       .then(async (res) => {
         const resCategories = await fetchCategories()
         setItems(res)
+        setFilteredItems(res)
         setCategories(resCategories)
         setLoading(false)
       })
@@ -58,9 +59,9 @@ const HomeScreen = (props) => {
     return (
       <FlatGrid
         itemDimension={140}
-        data={items}
+        data={filteredItems}
         style={styles.gridView}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <Product
             id={item.id}
             name={item.name}
@@ -73,13 +74,24 @@ const HomeScreen = (props) => {
     )
   }
 
+  const filterByCategory = (category) => {
+    if (category === 'Всички') {
+      setFilteredItems(items)
+    } else {
+      const res = items.filter((item) => item.category === category);
+      setFilteredItems(res)
+    }
+  }
+
   const RenderCategory = ({item}) => {
     return (
       <View style={{
         width: 200, borderWidth: 2, borderColor: '#ffff',
         padding: 8, margin: 4, borderRadius: 15
       }}>
-        <Text style={{ color: '#ffff', textAlign: 'center' }}>{item.name}</Text>
+        <TouchableOpacity onPress={() => filterByCategory(item.name)}>
+          <Text style={{ color: '#ffff', textAlign: 'center' }}>{item.name}</Text>
+        </TouchableOpacity>
       </View>
     )
   }
@@ -101,13 +113,12 @@ const HomeScreen = (props) => {
                   data={categories}
                   renderItem={({ item }) => <RenderCategory item={item} />}
                   showsHorizontalScrollIndicator={false}
-                />
+              />
           </View>
       </View>
       
       <Text style={{ color: '#ffff', textAlign: 'center' }}>Продукти</Text>
       <ListGrid />
-
     </View>
   )
 }
