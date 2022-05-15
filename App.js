@@ -13,7 +13,8 @@ import LoginScreen from './src/screens/Login'
 import AddProductScreen from './src/screens/AddProductScreen'
 import EditProductScreen from './src/screens/EditProductScreen'
 import SignUp from './src/screens/SignUp'
-import CategoryScreen from './src/screens/CategoryScreen'
+import AddCategoryScreen from './src/screens/AddCategoryScreen'
+import CategoriesScreen from './src/screens/CategoriesScreen'
 
 const Stack = createNativeStackNavigator();
 
@@ -36,8 +37,8 @@ function App() {
               <Stack.Screen name="AddProduct" component={AddProductScreen} />
               <Stack.Screen name="EditProduct" component={EditProductScreen} />
               <Stack.Screen name="DeleteProduct" component={AddProductScreen} />
-              <Stack.Screen name="Category" component={CategoryScreen} />
-
+              <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
+              <Stack.Screen name="Categories" component={CategoriesScreen} />
             </Stack.Navigator>
           </NavigationContainer>
         </OrientationContext.Provider>

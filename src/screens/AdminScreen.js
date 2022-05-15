@@ -60,7 +60,11 @@ const AdminScreen = ({ navigation }) => {
   }
 
   const onAddCategory = () => {
-    navigation.navigate('Category')
+    navigation.navigate('AddCategory')
+  }
+
+  const onNavigateCategories = () => {
+    navigation.navigate('Categories')
   }
 
   const onDeleteProduct = async (id) => {
@@ -89,6 +93,10 @@ const AdminScreen = ({ navigation }) => {
           <Text style={styles.categoryText}>Създай категория</Text>
         </TouchableOpacity>
       </View>
+
+      <TouchableOpacity onPress={onNavigateCategories}>
+          <Text style={styles.categoryText}>Категории</Text>
+        </TouchableOpacity>
 
       <View style={{ flex: 1 }}>
         <FlatGrid

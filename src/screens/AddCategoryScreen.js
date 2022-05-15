@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 
 import { firestore } from '../firebase/config'
 
-const CategoryScreen = ({ navigation }) => {
+const AddCategoryScreen = ({ navigation }) => {
   const [categoryName, setCategoryName] = useState('')
 
   const onAddCategory = () => {
@@ -78,4 +78,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default CategoryScreen
+export default AddCategoryScreen
