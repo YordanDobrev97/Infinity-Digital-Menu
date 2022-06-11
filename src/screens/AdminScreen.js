@@ -95,7 +95,9 @@ const AdminScreen = ({ navigation }) => {
       </View>
 
       <View style={styles.productContainer}>
-        <Text style={{color: 'white', textAlign: 'center', textDecorationLine: 'underline'}}>Категории</Text>
+        <TouchableOpacity onPress={onNavigateCategories}>
+          <Text  style={{color: 'white', textAlign: 'center', textDecorationLine: 'underline'}}>Категории</Text>
+        </TouchableOpacity>
       </View>
 
       {/* <View style={styles.topHeader}>
@@ -174,17 +176,12 @@ const styles = StyleSheet.create({
     borderRadius: 30
   },
   top: {
-    backgroundColor: '#3B3B3B',
     marginTop: 25,
     width: '100%',
     height: '10%',
     border: 1,
     borderBottomWidth: 3,
     borderRadius: 18,
-    // border: 10,
-    // borderRadius: 18,
-    // padding: 8,
-    // marginBottom: 15,
   },
   title: {
     color: 'white',

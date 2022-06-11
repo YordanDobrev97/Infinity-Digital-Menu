@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-native'
-
+import Icon from 'react-native-vector-icons/FontAwesome'
 import { firestore } from '../firebase/config'
 
 const AddCategoryScreen = ({ navigation }) => {
@@ -21,9 +21,18 @@ const AddCategoryScreen = ({ navigation }) => {
         }
       })
   }
+  const backToAdmin = () => {
+    navigation.navigate('Categories')
+  }
+
   return(
     <View style={styles.categoryPage}>
-      
+      <View style={styles.nav}>
+        <TouchableOpacity onPress={backToAdmin}>
+          <Icon name="arrow-left" style={{color: 'white', fontSize: 22}}/>
+        </TouchableOpacity>
+        <Text style={styles.title}>Назад</Text>
+      </View>
       <View style={styles.top}>
         <Text style={styles.topText}>Създай нова категория</Text>
       </View>
@@ -44,7 +53,24 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: "#444341" 
+    backgroundColor: '#394961', 
+  },
+  nav: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginTop: 25,
+    width: '100%',
+    padding: 14,
+    backgroundColor: '#161922',
+    border: 1,
+    borderRadius: 8
+  },
+  title: {
+    color: 'white',
+    textAlign: 'center',
+    marginLeft: 10
   },
   top: {
     margin: 20

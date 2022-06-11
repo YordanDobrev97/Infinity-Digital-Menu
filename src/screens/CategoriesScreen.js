@@ -40,7 +40,7 @@ const CategoriesScreen = ({ navigation }) => {
     return dbProducts
   }
 
-  const onNavigateAdmin = () => {
+  const backToAdmin = () => {
     navigation.navigate('Admin')
   }
 
@@ -75,29 +75,38 @@ const CategoriesScreen = ({ navigation }) => {
     })
   }
 
+  const addCategory = () => {
+    navigation.navigate('AddCategory')
+  }
+
   const RowCategory = ({ item }) => {
     return (
-      <View key={item.id} style={{margin: 2, padding: 8, minWidth: '100%',
-      backgroundColor: "#444340", flexDirection: 'row', flexWrap: 'wrap',
-      alignItems: 'center', justifyContent: 'space-around'}}>
-        <Text style={{ color: '#ffff', margin: 4 }}>{item.name}</Text>
+      <View key={item.id} style={styles.category}>
+          <Text style={{ color: '#ffff', margin: 4 }}>{item.name}</Text>
+          <View style={styles.action}>
           <TouchableOpacity onPress={() => onEditCategory(item.id)}>
             <Icon name='edit' style={{fontSize: 20, margin: 4, color: '#ffff'}}/>
           </TouchableOpacity>
           <TouchableOpacity onPress={() => onDeleteCategory(item.id, item.name)}>
             <Icon name='trash' style={{fontSize: 20,margin: 4, color: '#ffff'}}/>
-          </TouchableOpacity>
+          </TouchableOpacity> 
+          </View>
       </View>
     )
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.titleText}>Текущи категории</Text>
+      <View style={styles.nav}>
+        <TouchableOpacity onPress={backToAdmin}>
+          <Icon name="arrow-left" style={{color: 'white', fontSize: 22}}/>
+        </TouchableOpacity>
+        <Text style={styles.title}>Категории</Text>
+      </View>
 
-        <TouchableOpacity onPress={onNavigateAdmin}>
-          <Text style={styles.titleText}>Към Администрация</Text>
+      <View style={{margin: 5}}>
+        <TouchableOpacity onPress={addCategory}>
+          <Icon name='plus' style={{ textAlign: 'center', color: 'white', fontSize: 23 }} />
         </TouchableOpacity>
       </View>
 
@@ -117,16 +126,24 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: "#444341"
+    backgroundColor: "black"
   },
-  header: {
-    margin: 25
+  nav: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    marginTop: 25,
+    width: '100%',
+    padding: 14,
+    backgroundColor: '#161922',
+    border: 1,
+    borderRadius: 8
   },
-  titleText: {
-    color: '#ffff',
+  title: {
+    color: 'white',
     textAlign: 'center',
-    margin: 4,
-    fontSize: 20,
+    marginLeft: 10
   },
   tableCategory: {
     width: '100%',
@@ -136,8 +153,21 @@ const styles = StyleSheet.create({
     backgroundColor: '#1F1F21',
     padding: 6
   },
-  listCategory: {
-
+  category: {
+    margin: 3,
+    padding: 10,
+    borderRadius: 40,
+    minWidth: '100%',
+    backgroundColor: "#444340",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'baseline',
+    justifyContent: 'space-between'
+  },
+  action: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'flex-end'
   }
 })
 
