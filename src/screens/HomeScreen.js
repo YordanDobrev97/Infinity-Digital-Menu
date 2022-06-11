@@ -100,7 +100,7 @@ const HomeScreen = (props) => {
     <View style={{ flex: 1, backgroundColor: '#000d1a' }}>
       <Header navigation={props.navigation} />
 
-      <View style={{ margin: 10 }}>
+      <View style={{ marginTop: 15 }}>
         <Text style={{ color: '#ffff', textAlign: 'center' }}>Категории</Text>
 
           <View style={{

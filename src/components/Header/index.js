@@ -10,6 +10,7 @@ const CustomHeader = ({ navigation }) => {
 
   const [showMenu, setShowMenu] = useState(false)
   const [countProducts, setCountProducts] = useState(context.products.length)
+  const [message, setMessage] = useState('')
 
   useEffect(() => {
     setCountProducts(context.products.length)
@@ -19,11 +20,34 @@ const CustomHeader = ({ navigation }) => {
     setShowMenu(true)
   }
 
+  const callAdministrator = () => {
+    fetch("https://digitalmenu-api.herokuapp.com", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: "Nikoletaairbnb1@gmail.com",
+        subject: "Рецепция - помощ",
+        text: `Има изпратено запитване към рецепция`,
+      }),
+    }).then((res) => {
+      if (res) {
+        setTimeout(() => {
+          setMessage('Вашата заявка към рецепция беше изпратена успешно!')
+        }, 1000)
+    
+        setTimeout(() => {
+          setMessage('')
+        }, 5000)
+      }
+    });
+  }
+
   if (showMenu) {
     return <Sidebar showMenu={showMenu} setShowMenu={setShowMenu} navigation={navigation} />
   }
 
   return (
+    <View>
     <View style={styles.header}>
       <View>
         <TouchableOpacity onPress={showMenuHandler}>
@@ -33,7 +57,11 @@ const CustomHeader = ({ navigation }) => {
       <View style={{ display: 'flex', justifyContent: 'center' }}>
         <Text style={{ textAlign: 'center', color: '#ffff', fontSize: 20 }}>Infinity Digital Menu</Text>
       </View>
-      <View>
+      <View style={{display: 'flex', flexDirection: 'row'}}>
+        <TouchableOpacity onPress={callAdministrator}>
+          <Icon name='bell' style={{ fontSize: 32, color: 'white' }} />
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => { navigation.navigate('Basket') }}>
           <Icon name='shopping-cart' style={{ fontSize: 32, color: 'white' }} />
         </TouchableOpacity>
@@ -45,8 +73,15 @@ const CustomHeader = ({ navigation }) => {
           <>
           </>
         )}
-
       </View>
+    </View>
+    <View>
+        {message.length > 0 && (
+          <View style={styles.message}>
+            <Text style={{color: '#90ee90'}}>{message}</Text>
+        </View>
+        )}
+     </View>
     </View>
   )
 }
@@ -92,6 +127,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#FFFF',
     fontSize: 12
+  },
+  message: {
+    position: 'relative',
+    top: 0,
+    backgroundColor: '#303650',
+    padding: 15,
+    width: '100%' 
   }
 })
 
