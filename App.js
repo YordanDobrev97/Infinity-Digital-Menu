@@ -12,6 +12,7 @@ import BasketScreen from './src/screens/BasketScreen'
 import LoginScreen from './src/screens/Login'
 import AddProductScreen from './src/screens/AddProductScreen'
 import EditProductScreen from './src/screens/EditProductScreen'
+import ProductsScreen from './src/screens/ProductsScreen'
 import SignUp from './src/screens/SignUp'
 import AddCategoryScreen from './src/screens/AddCategoryScreen'
 import CategoriesScreen from './src/screens/CategoriesScreen'
@@ -36,6 +37,7 @@ function App() {
               <Stack.Screen name="Login" component={LoginScreen} />
               <Stack.Screen name="SignUp" component={SignUp} />
               <Stack.Screen name="AddProduct" component={AddProductScreen} />
+              <Stack.Screen name="Products" component={ProductsScreen} />
               <Stack.Screen name="EditProduct" component={EditProductScreen} />
               <Stack.Screen name="DeleteProduct" component={AddProductScreen} />
               <Stack.Screen name="AddCategory" component={AddCategoryScreen} />

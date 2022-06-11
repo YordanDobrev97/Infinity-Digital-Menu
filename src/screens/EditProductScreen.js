@@ -120,10 +120,11 @@ const EditProductScreen = ({ route, navigation }) => {
   }
 
   const onBackAdmin = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Admin' }]
-    })
+    // navigation.reset({
+    //   index: 0,
+    //   routes: [{ name: 'Admin' }]
+    // })
+    navigation.navigate('Products')
   }
 
   if (uploading) {

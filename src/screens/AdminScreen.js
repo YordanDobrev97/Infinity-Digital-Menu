@@ -11,7 +11,6 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { FlatGrid } from 'react-native-super-grid'
 import { firestore } from '../firebase/config'
-
 const AdminScreen = ({ navigation }) => {
   const [items, setItems] = useState([])
   const [loading, setLoading] = useState(true)
@@ -67,6 +66,10 @@ const AdminScreen = ({ navigation }) => {
     navigation.navigate('Categories')
   }
 
+  const navigateToProducts = () => {
+    navigation.navigate('Products')
+  }
+
   const onDeleteProduct = async (id) => {
     firestore.collection('products').doc(id).delete()
     .then((res) => {
@@ -78,13 +81,24 @@ const AdminScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.title}>Администрация</Text>
-        <TouchableOpacity style={styles.back} onPress={onHomeScreen}>
-          <Text style={styles.backText}>Начална страница</Text>
+        <TouchableOpacity onPress={onHomeScreen}>
+          <Icon name="home" style={{marginTop: 5,color: 'white', textAlign: 'center', fontSize: 28}}/>
         </TouchableOpacity>
       </View>
 
-      <View style={styles.topHeader}>
+      <Text style={styles.title}>Администрация</Text>
+
+      <View style={styles.productContainer}>
+        <TouchableOpacity onPress={navigateToProducts}>
+        <Text style={{color: 'white', textAlign: 'center', textDecorationLine: 'underline'}}>Всички продукти</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View style={styles.productContainer}>
+        <Text style={{color: 'white', textAlign: 'center', textDecorationLine: 'underline'}}>Категории</Text>
+      </View>
+
+      {/* <View style={styles.topHeader}>
         <TouchableOpacity style={styles.addProduct} onPress={onAddProductScreen}>
           <Text style={{ textAlign: 'center' }}>+</Text>
         </TouchableOpacity>
@@ -134,7 +148,7 @@ const AdminScreen = ({ navigation }) => {
             </View>
           )}
         />
-      </View>
+      </View> */}
 
     </View>
   )
@@ -149,21 +163,32 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    backgroundColor: "#444341"
+    backgroundColor: "black"
+  },
+  productContainer: {
+    width: '80%',
+    margin: 30,
+    padding: 15,
+    border: 1,
+    backgroundColor: '#394961',
+    borderRadius: 30
   },
   top: {
-    marginTop: 50,
+    backgroundColor: '#3B3B3B',
+    marginTop: 25,
     width: '100%',
-    height: '20%',
-    borderStartColor: '#BA9FF8',
+    height: '10%',
+    border: 1,
     borderBottomWidth: 3,
     borderRadius: 18,
-    padding: 8,
-    marginBottom: 15,
+    // border: 10,
+    // borderRadius: 18,
+    // padding: 8,
+    // marginBottom: 15,
   },
   title: {
-    color: '#ffff',
-    fontSize: 28,
+    color: 'white',
+    fontSize: 24,
     textAlign: 'center'
   },
   actions: {
