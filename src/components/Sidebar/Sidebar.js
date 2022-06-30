@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     sidebarContainer: {
         width: '100%',
         height: '100%',
-        backgroundColor: '#AC7F24',
+        backgroundColor: '#274472',
         color: 'white'
     },
     closeIcon: {
