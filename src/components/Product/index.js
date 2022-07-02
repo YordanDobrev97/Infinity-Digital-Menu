@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import {
   Text,
   Image,
@@ -9,14 +9,14 @@ import {
   Pressable
 } from 'react-native'
 import CartContext from '../../context/CartContext'
+import LanguageContext from '../../context/LanguageContext'
 
 const Product = ({ id, name, price, image, description }) => {
   const [flag, setFlag] = useState(false)
   const [count, setCount] = useState(1)
   const [showDetails, setShowDetails] = useState(false)
-
   const context = useContext(CartContext)
-  console.log(context.products)
+  const languageContext = useContext(LanguageContext)
 
   const onAddProduct = () => {
     context.setProducts((oldValue) => {
