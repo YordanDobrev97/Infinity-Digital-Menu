@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import {
   StyleSheet,
   View,
@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { FlatGrid } from 'react-native-super-grid'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import Header from '../components/Header/index'
@@ -24,6 +25,9 @@ const HomeScreen = (props) => {
   const [showMenuLang, setMenuLang] = useState(false)
   const languageContext = useContext(LanguageContext)
   const [lang, setLang] = useState(languageContext.lang)
+  const [category, setCategory] = useState("Категории")
+  const [productText, setProductText] = useState("Продукти")
+  const [appLanguage, setAppLanguage] = useState("Bulgarian")
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -33,22 +37,12 @@ const HomeScreen = (props) => {
       return dbProducts
     }
 
-    const fetchCategories = async () => {
-      const dbCategories = await (await firestore.collection('categories').get())
-        .docs.map((category => {
-
-          return { ...category.data() }
-        }))
-      return dbCategories
-    }
-
     fetchProducts()
       .then(async (res) => {
-        console.log(languageContext.lang)
-        const resCategories = await fetchCategories()
-        setItems(res)
+        //setItems(res)
         translateProducts(res)
-        setCategories(resCategories)
+        translateCategories()
+        //setCategories(resCategories)
         setLoading(false)
       })
   }, [])
@@ -58,31 +52,121 @@ const HomeScreen = (props) => {
       languageContext.setLang(lang)
     }
 
+    const updateCategoryLang = async () => {
+      const textCategory = await translate(category, {
+        tld: "cn",
+        to: lang,
+      });
+      return textCategory;
+    }
+
+    const updateAppLang = async () => {
+      const textCategory = await translate(appLanguage, {
+        tld: "cn",
+        to: lang,
+      });
+      return textCategory;
+    }
+
+    const updateProductLang = async () => {
+      const textCategory = await translate(productText, {
+        tld: "cn",
+        to: lang,
+      });
+      return textCategory;
+    }
+
     changeLang()
       .then(() => {
         translateProducts(filteredItems)
       })
+    
+    updateCategoryLang()
+      .then((res) => {
+        setCategory(res)
+    })
+
+    updateAppLang()
+      .then((r) => {
+        setAppLanguage(r[0])
+    })
+
+    updateProductLang()
+      .then((r) => {
+        setProductText(r[0])
+    })
+
+    translateCategories(categories);
+    
   }, [lang])
 
-  const translateProducts = async (data) => {
-    var results = await Promise.all(data.map(async (item) => {
-      const productName = await translate(item.name, {
-        tld: "cn",
-        to: lang,
-      });
-      const productDescription = await translate(item.description, {
-        tld: "cn",
-        to: lang,
-      })
+  const fetchCategories = async () => {
+    const dbCategories = await (await firestore.collection('categories').get())
+      .docs.map((category => {
 
-      const updateCategory = await translate(item.category, {
-        tld: "cn",
-        to: lang,
-      })
-      return { ...item, name: productName[0], description: productDescription, category: updateCategory }
-    }));
-    setFilteredItems(results)
+        return { ...category.data() }
+      }))
+    return dbCategories
   }
+
+  const translateProducts = async (data) => {
+    const chache = await AsyncStorage.getItem(`@data-${lang}`, (err, dataRes) => {
+      return dataRes
+    })
+
+    //get products from chache if have any
+    const res = JSON.parse(chache) 
+    if (res) {
+      setFilteredItems(res)
+      setItems(res)
+    } else {
+      var results = await Promise.all(data.map(async (item) => {
+        const productName = await translate(item.name, {
+          tld: "cn",
+          to: lang,
+        });
+        const productDescription = await translate(item.description, {
+          tld: "cn",
+          to: lang,
+        })
+        const updateCategory = await translate(item.category, {
+          tld: "cn",
+          to: lang,
+        })
+        return { ...item, name: productName[0], description: productDescription, category: updateCategory }
+      }));
+      const jsonValue = JSON.stringify(results)
+      AsyncStorage.setItem(`@data-${lang}`, jsonValue, (err, res) => {
+        setFilteredItems(results)
+        setItems(results)
+      })
+    }
+  }
+
+  const translateCategories = async () => {
+    const chache = await AsyncStorage.getItem(`@categories-${lang}`, (err, dataRes) => {
+      return dataRes
+    })
+
+    //get categories from chache if have any
+    const res = JSON.parse(chache) 
+    if (res) {
+      setCategories(res)
+    } else {
+      const resCategories = await fetchCategories()
+      var results = await Promise.all(resCategories.map(async (item) => {
+        const upadteCategoryName = await translate(item.name, {
+          tld: "cn",
+          to: lang,
+        })
+        return { name: upadteCategoryName[0] }
+      }));
+
+      const jsonValue = JSON.stringify(results)
+      AsyncStorage.setItem(`@categories-${lang}`, jsonValue, (err, res) => {
+        setCategories(results)
+      })
+  }}
 
   if (loading) {
     return (
@@ -119,7 +203,7 @@ const HomeScreen = (props) => {
     if (category === 'Всички') {
       setFilteredItems(items)
     } else {
-      const res = items.filter((item) => item.category === category);
+      const res = items.filter((item) => item.category[0].toLowerCase() === category.toLowerCase());
       setFilteredItems(res)
     }
   }
@@ -147,11 +231,12 @@ const HomeScreen = (props) => {
     setMenuLang(false)
   }
 
+
   return (
     <View style={{ flex: 1, backgroundColor: '#000d1a' }}>
       <Header navigation={props.navigation} />
       <TouchableOpacity style={styles.langBorder} onPress={() => setMenuLang(!showMenuLang)}>
-        <Text style={styles.textLang}>{lang === "bg" ? "Български": "Английски"}</Text>
+        <Text style={styles.textLang}>{appLanguage === "български" ? "Български" : "English"}</Text>
         <Icon name="arrow-down" style={{ color: "white", margin: 5, fontSize: 17 }} />
       </TouchableOpacity>
 
@@ -169,7 +254,7 @@ const HomeScreen = (props) => {
       )}
 
       <View style={{ marginTop: 15 }}>
-        <Text style={{ color: '#ffff', textAlign: 'center' }}>Категории</Text>
+        <Text style={{ color: '#ffff', textAlign: 'center' }}>{category}</Text>
 
         <View style={{
           display: 'flex', flexDirection: 'row', justifyContent: 'center',
@@ -185,7 +270,7 @@ const HomeScreen = (props) => {
         </View>
       </View>
 
-      <Text style={{ color: '#ffff', textAlign: 'center' }}>Продукти</Text>
+      <Text style={{ color: '#ffff', textAlign: 'center' }}>{productText}</Text>
       <ListGrid />
     </View>
   )

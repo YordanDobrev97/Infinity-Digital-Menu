@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import {
   Text,
   Image,
@@ -16,7 +16,6 @@ const Product = ({ id, name, price, image, description }) => {
   const [count, setCount] = useState(1)
   const [showDetails, setShowDetails] = useState(false)
   const context = useContext(CartContext)
-  const languageContext = useContext(LanguageContext)
 
   const onAddProduct = () => {
     context.setProducts((oldValue) => {
